@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>匯出心情紀錄</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Zen+Maru+Gothic&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: "Zen Maru Gothic", sans-serif;
+      background-color: #fffaf5;
+      padding: 30px;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Nanum Pen Script', cursive;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      font-size: 16px;
+      padding: 10px 20px;
+      background-color: #30BEBF;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #26a2a3;
+    }
+  </style>
+</head>
+<body>
+  <h1>📤 匯出心情紀錄 (CSV)</h1>
+  <p>點擊下方按鈕即可下載所有紀錄（支援中文顯示）</p>
+  <button onclick="exportCSV()">下載 CSV</button>
+
+  <script>
+    function exportCSV() {
+      const keys = Object.keys(localStorage).filter(k => k.startsWith("ziary-")).sort();
+      const rows = [["日期", "顏色們", "心情筆記"]];
+
+      keys.forEach(k => {
+        const date = k.replace("ziary-", "");
+        const entry = JSON.parse(localStorage.getItem(k));
+        const colors = (entry.colors || []).join(",");
+        const note = entry.note ? entry.note.replace(/\n/g, " ") : "";
+        rows.push([date, colors, note]);
+      });
+
+      const csvContent = rows.map(row => row.map(val => `"${val}"`).join(",")).join("\n");
+      const BOM = "\uFEFF";
+      const blob = new Blob([BOM + csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "ziary_records.csv";
+      link.click();
+    }
+  </script>
+</body>
+</html>

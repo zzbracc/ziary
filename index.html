@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="ziary-icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="ziary-icon-192.png">
+  <meta name="theme-color" content="#30BEBF">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log("Service Worker Registered"));
+    }
+  </script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>今天的紀錄</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Zen+Maru+Gothic&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      background-color: #fffaf5;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-family: 'Nanum Pen Script', cursive;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .link {
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .link a {
+      color: #769EDB;
+      text-decoration: none;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 60px);
+      grid-gap: 12px;
+      justify-content: center;
+      margin: 20px auto;
+    }
+
+    .circle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      background-color: white;
+      cursor: pointer;
+    }
+
+    .circle.selected-red { background-color: #CC5F5A; border-color: #CC5F5A; }
+    .circle.selected-orange { background-color: #ff9933; border-color: #ff9933; }
+    .circle.selected-yellow { background-color: #FFD700; border-color: #FFD700; }
+    .circle.selected-brown { background-color: #B5866C; border-color: #B5866C; }
+    .circle.selected-green { background-color: #BED06F; border-color: #BED06F; }
+    .circle.selected-blue { background-color: #769EDB; border-color: #769EDB; }
+    .circle.selected-teal { background-color: #30BEBF; border-color: #30BEBF; }
+    .circle.selected-gray { background-color: #d3d3d3; border-color: #d3d3d3; }
+    .circle.selected-black { background-color: #000000; border-color: #000000; }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 90%;
+      max-width: 400px;
+      margin: 10px auto;
+    }
+
+    input[type="date"],
+    textarea {
+      padding: 10px;
+      font-size: 14px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      resize: vertical;
+      height: 100px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 14px;
+      border: none;
+      border-radius: 8px;
+      background-color: #769EDB;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #5f86c7;
+    }
+  </style>
+</head>
+<body>
+  <h1>今天的紀錄</h1>
+  <div class="link"><a href="ziary_calendar.html">🟦 查看心情總覽（月曆）</a></div>
+
+  <div class="input-group">
+    <label for="date">選擇日期：</label>
+    <input type="date" id="date">
+  </div>
+
+  <div class="grid">
+    <div class="circle" data-color="red"></div>
+    <div class="circle" data-color="orange"></div>
+    <div class="circle" data-color="yellow"></div>
+    <div class="circle" data-color="brown"></div>
+    <div class="circle" data-color="green"></div>
+    <div class="circle" data-color="blue"></div>
+    <div class="circle" data-color="teal"></div>
+    <div class="circle" data-color="gray"></div>
+    <div class="circle" data-color="black"></div>
+  </div>
+
+  <div class="input-group">
+    <label for="note">心情筆記：</label>
+    <textarea id="note" placeholder="今天過得怎麼樣呢？"></textarea>
+  </div>
+
+  <button onclick="saveEntry()">儲存</button>
+
+  <script>
+    const dateInput = document.getElementById('date');
+    const noteInput = document.getElementById('note');
+    const circles = document.querySelectorAll('.circle');
+
+    function getSelectedColors() {
+      return Array.from(circles)
+        .filter(circle => circle.className.includes('selected-'))
+        .map(circle => circle.dataset.color);
+    }
+
+    function setSelectedColors(colors) {
+      circles.forEach(circle => {
+        const color = circle.dataset.color;
+        circle.classList.remove('selected-' + color);
+        if (colors.includes(color)) {
+          circle.classList.add('selected-' + color);
+        }
+      });
+    }
+
+    function saveEntry() {
+      const date = dateInput.value;
+      if (!date) {
+        alert('請選擇日期');
+        return;
+      }
+      const entry = {
+        colors: getSelectedColors(),
+        note: noteInput.value
+      };
+      localStorage.setItem('ziary-' + date, JSON.stringify(entry));
+      alert('已儲存！');
+    }
+
+    function loadEntry(date) {
+      const saved = localStorage.getItem('ziary-' + date);
+      if (saved) {
+        const entry = JSON.parse(saved);
+        setSelectedColors(entry.colors || []);
+        noteInput.value = entry.note || '';
+      } else {
+        setSelectedColors([]);
+        noteInput.value = '';
+      }
+    }
+
+    dateInput.addEventListener('change', () => {
+      loadEntry(dateInput.value);
+    });
+
+    circles.forEach(circle => {
+      circle.addEventListener('click', () => {
+        const color = circle.dataset.color;
+        circle.classList.toggle('selected-' + color);
+      });
+    });
+  </script>
+</body>
+</html>

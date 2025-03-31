@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ziary - 心情月曆總覽</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      font-family: "Helvetica Neue", sans-serif;
+      background-color: #fffaf5;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin: 16px 0 5px;
+    }
+
+    .link {
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .link a {
+      text-decoration: none;
+      color: #769EDB;
+    }
+
+    select {
+      font-size: 16px;
+      margin: 8px;
+      padding: 4px 8px;
+    }
+
+    #calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .weekday {
+      font-weight: bold;
+      font-size: 13px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .day {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      aspect-ratio: 1 / 1;
+      padding: 4px;
+      box-sizing: border-box;
+    }
+
+    .date-label {
+      font-size: 13px;
+      height: 18px;
+      line-height: 18px;
+      text-align: center;
+    }
+
+    .dots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      flex-grow: 1;
+      align-items: center;
+      justify-items: center;
+    }
+
+    .dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1px solid #ccc;
+    }
+
+    .filled-red { background-color: #CC5F5A; border-color: #CC5F5A; }
+    .filled-orange { background-color: #ff9933; border-color: #ff9933; }
+    .filled-yellow { background-color: #FFD700; border-color: #FFD700; }
+    .filled-brown { background-color: #B5866C; border-color: #B5866C; }
+    .filled-green { background-color: #BED06F; border-color: #BED06F; }
+    .filled-blue { background-color: #769EDB; border-color: #769EDB; }
+    .filled-teal { background-color: #30BEBF; border-color: #30BEBF; }
+    .filled-gray { background-color: #d3d3d3; border-color: #d3d3d3; }
+    .filled-black { background-color: #000000; border-color: #000000; }
+  </style>
+</head>
+<body>
+  <h1>心情月曆總覽</h1>
+  <div class="link"><a href="ziary_home.html">🏠 回功能頁</a></div>
+
+  <div>
+    <select id="month"></select>
+    <select id="year"></select>
+  </div>
+  <div id="calendar"></div>
+
+  <script>
+    const calendar = document.getElementById("calendar");
+    const monthSelect = document.getElementById("month");
+    const yearSelect = document.getElementById("year");
+
+    const allColors = ["red", "orange", "yellow", "brown", "green", "blue", "teal", "gray", "black"];
+    const colorClassMap = {
+      red: "filled-red", orange: "filled-orange", yellow: "filled-yellow",
+      brown: "filled-brown", green: "filled-green", blue: "filled-blue",
+      teal: "filled-teal", gray: "filled-gray", black: "filled-black"
+    };
+
+    function generateCalendar(month, year) {
+      calendar.innerHTML = "";
+
+      const weekdays = ["一", "二", "三", "四", "五", "六", "日"];
+      weekdays.forEach(day => {
+        const wd = document.createElement("div");
+        wd.className = "weekday";
+        wd.textContent = day;
+        calendar.appendChild(wd);
+      });
+
+      const firstDay = new Date(year, month, 1);
+      const lastDate = new Date(year, month + 1, 0).getDate();
+      let startDay = firstDay.getDay();
+      startDay = startDay === 0 ? 6 : startDay - 1;
+
+      const totalCells = 42;
+
+      for (let i = 0; i < totalCells; i++) {
+        const cell = document.createElement("div");
+        cell.className = "day";
+
+        const dateIndex = i - startDay + 1;
+        const label = document.createElement("div");
+        label.className = "date-label";
+        label.textContent = (i >= startDay && dateIndex <= lastDate) ? dateIndex : "";
+        cell.appendChild(label);
+
+        const dots = document.createElement("div");
+        dots.className = "dots";
+
+        let selectedColors = [];
+        if (i >= startDay && dateIndex <= lastDate) {
+          const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateIndex).padStart(2, '0')}`;
+          const entry = localStorage.getItem("ziary-" + fullDate);
+          if (entry) {
+            const data = JSON.parse(entry);
+            selectedColors = data.colors || [];
+          }
+        }
+
+        allColors.forEach(color => {
+          const dot = document.createElement("div");
+          dot.className = "dot";
+          if (selectedColors.includes(color)) {
+            dot.classList.add(colorClassMap[color]);
+          }
+          dots.appendChild(dot);
+        });
+
+        cell.appendChild(dots);
+        calendar.appendChild(cell);
+      }
+    }
+
+    function populateSelectors() {
+      for (let m = 0; m < 12; m++) {
+        const opt = document.createElement("option");
+        opt.value = m;
+        opt.text = m + 1;
+        monthSelect.appendChild(opt);
+      }
+
+      const now = new Date();
+      for (let y = now.getFullYear() - 5; y <= now.getFullYear() + 5; y++) {
+        const opt = document.createElement("option");
+        opt.value = y;
+        opt.text = y;
+        yearSelect.appendChild(opt);
+      }
+
+      monthSelect.value = now.getMonth();
+      yearSelect.value = now.getFullYear();
+    }
+
+    populateSelectors();
+    generateCalendar(Number(monthSelect.value), Number(yearSelect.value));
+
+    monthSelect.addEventListener("change", () => {
+      generateCalendar(Number(monthSelect.value), Number(yearSelect.value));
+    });
+
+    yearSelect.addEventListener("change", () => {
+      generateCalendar(Number(monthSelect.value), Number(yearSelect.value));
+    });
+  </script>
+</body>
+</html>

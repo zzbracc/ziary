@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Ziary 首頁</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Zen+Maru+Gothic&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: "Zen Maru Gothic", sans-serif;
+      background: linear-gradient(to bottom right, #f8fffb, #e4fdfc);
+      padding: 30px;
+      text-align: center;
+      color: #444;
+      position: relative;
+    }
+
+    h1 {
+      font-family: "Nanum Pen Script", cursive;
+      font-size: 40px;
+      color: #30BEBF;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 16px;
+      margin-bottom: 30px;
+      color: #777;
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    .btn {
+      padding: 15px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 16px;
+      background-color: #30BEBF;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      text-decoration: none;
+      display: block;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .btn:hover {
+      background-color: #26a2a3;
+    }
+
+    @media (min-width: 480px) {
+      .button-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .icon {
+      width: 50px;
+      position: absolute;
+    }
+
+    .top-left {
+      top: 20px;
+      left: 20px;
+    }
+
+    .top-right {
+      top: 20px;
+      right: 20px;
+    }
+
+    .bottom-left {
+      bottom: 20px;
+      left: 20px;
+    }
+
+    .bottom-right {
+      bottom: 20px;
+      right: 20px;
+    }
+  </style>
+</head>
+<body>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Star_symbol.svg/120px-Star_symbol.svg.png" class="icon top-left" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Love_Heart_SVG.svg/120px-Love_Heart_SVG.svg.png" class="icon top-right" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Star_icon_stylized.svg/120px-Star_icon_stylized.svg.png" class="icon bottom-left" />
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Heart_icon_red_hollow.svg/120px-Heart_icon_red_hollow.svg.png" class="icon bottom-right" />
+
+  <h1>Ziary</h1>
+  <p>我的心情紀錄花園 🌱</p>
+
+  <div class="button-grid">
+    <a class="btn" href="index.html">📅 開始今天的紀錄</a>
+    <a class="btn" href="ziary_calendar.html">🟦 心情總覽（月曆）</a>
+    <a class="btn" href="ziary_list_overview.html">📋 心情列表（日記）</a>
+    <a class="btn" href="ziary_export.html">📤 匯出資料（CSV）</a>
+    <a class="btn" href="ziary_stats.html">📊 心情統計圖表</a>
+    <a class="btn" href="ziary_login.html">🔒 登入畫面</a>
+  </div>
+</body>
+</html>
