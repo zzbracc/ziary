@@ -1,10 +1,22 @@
+
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ziary - 心情月曆總覽</title>
-  <!-- old style replaced -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="ziary-icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="ziary-icon-192.png">
+  <meta name="theme-color" content="#30BEBF">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log("Service Worker Registered"));
+    }
+  </script>
+  <style>
     html, body {
       margin: 0;
       padding: 0;
@@ -35,11 +47,17 @@
       padding: 4px 8px;
     }
 
+    .calendar-wrapper {
+      width: 100%;
+      overflow-x: auto;
+    }
+
     #calendar {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       gap: 5px;
       padding: 10px;
+      min-width: 420px;
       box-sizing: border-box;
     }
 
@@ -97,107 +115,6 @@
     .filled-gray { background-color: #d3d3d3; border-color: #d3d3d3; }
     .filled-black { background-color: #000000; border-color: #000000; }
   </style>
-
-<style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    font-family: "Helvetica Neue", sans-serif;
-    background-color: #fffaf5;
-    text-align: center;
-  }
-
-  h1 {
-    font-size: 28px;
-    margin: 16px 0 5px;
-  }
-
-  .link {
-    font-size: 14px;
-    margin-bottom: 10px;
-  }
-
-  .link a {
-    text-decoration: none;
-    color: #769EDB;
-  }
-
-  select {
-    font-size: 16px;
-    margin: 8px;
-    padding: 4px 8px;
-  }
-
-  .calendar-wrapper {
-    width: 100%;
-    overflow-x: auto;
-  }
-
-  #calendar {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-    padding: 10px;
-    min-width: 420px;
-    box-sizing: border-box;
-  }
-
-  .weekday {
-    font-weight: bold;
-    font-size: 13px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .day {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    aspect-ratio: 1 / 1;
-    padding: 4px;
-    box-sizing: border-box;
-  }
-
-  .date-label {
-    font-size: 13px;
-    height: 18px;
-    line-height: 18px;
-    text-align: center;
-  }
-
-  .dots {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    flex-grow: 1;
-    align-items: center;
-    justify-items: center;
-  }
-
-  .dot {
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    border: 1px solid #ccc;
-  }
-
-  .filled-red { background-color: #CC5F5A; border-color: #CC5F5A; }
-  .filled-orange { background-color: #ff9933; border-color: #ff9933; }
-  .filled-yellow { background-color: #FFD700; border-color: #FFD700; }
-  .filled-brown { background-color: #B5866C; border-color: #B5866C; }
-  .filled-green { background-color: #BED06F; border-color: #BED06F; }
-  .filled-blue { background-color: #769EDB; border-color: #769EDB; }
-  .filled-teal { background-color: #30BEBF; border-color: #30BEBF; }
-  .filled-gray { background-color: #d3d3d3; border-color: #d3d3d3; }
-  .filled-black { background-color: #000000; border-color: #000000; }
-</style>
-
 </head>
 <body>
   <h1>心情月曆總覽</h1>
@@ -207,7 +124,10 @@
     <select id="month"></select>
     <select id="year"></select>
   </div>
-  <div class="calendar-wrapper" style="overflow-x:auto;"><div id="calendar" style="min-width:420px;"></div></div>
+
+  <div class="calendar-wrapper">
+    <div id="calendar"></div>
+  </div>
 
   <script>
     const calendar = document.getElementById("calendar");
