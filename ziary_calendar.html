@@ -169,29 +169,29 @@
         label.textContent = (i >= startDay && dateIndex <= lastDate) ? dateIndex : "";
         cell.appendChild(label);
 
-        const dots = document.createElement("div");
-        dots.className = "dots";
-
-        let selectedColors = [];
         if (i >= startDay && dateIndex <= lastDate) {
           const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateIndex).padStart(2, '0')}`;
           const entry = localStorage.getItem("ziary-" + fullDate);
+          let selectedColors = [];
           if (entry) {
             const data = JSON.parse(entry);
             selectedColors = data.colors || [];
           }
+
+          const dots = document.createElement("div");
+          dots.className = "dots";
+
+          allColors.forEach(color => {
+            const dot = document.createElement("div");
+            dot.className = "dot";
+            if (selectedColors.includes(color)) {
+              dot.classList.add(colorClassMap[color]);
+            }
+            dots.appendChild(dot);
+          });
+
+          cell.appendChild(dots);
         }
-
-        allColors.forEach(color => {
-          const dot = document.createElement("div");
-          dot.className = "dot";
-          if (selectedColors.includes(color)) {
-            dot.classList.add(colorClassMap[color]);
-          }
-          dots.appendChild(dot);
-        });
-
-        cell.appendChild(dots);
         calendar.appendChild(cell);
       }
     }
