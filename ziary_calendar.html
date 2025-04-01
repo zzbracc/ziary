@@ -95,12 +95,11 @@
     }
 
     .dots {
-  aspect-ratio: 1 / 1;
+  height: 48px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  align-items: center;
-  justify-items: center;
+  gap: 2px;
+  place-items: center;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1px;
@@ -125,13 +124,7 @@
     .filled-teal { background-color: #30BEBF; border-color: #30BEBF; }
     .filled-gray { background-color: #d3d3d3; border-color: #d3d3d3; }
     .filled-black { background-color: #000000; border-color: #000000; }
-  
-.dots.empty::before {
-  content: "";
-  display: block;
-  padding-bottom: 100%;
-}
-</style>
+  </style>
 </head>
 <body>
   <h1>心情月曆總覽</h1>
@@ -188,7 +181,6 @@
 
         const dots = document.createElement("div");
         dots.className = "dots";
-        if (!(i >= startDay && dateIndex <= lastDate)) dots.classList.add("empty");
 
         if (i >= startDay && dateIndex <= lastDate) {
           const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateIndex).padStart(2, '0')}`;
