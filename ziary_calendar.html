@@ -95,7 +95,6 @@
     }
 
     .dots {
-  height: 44px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1px;
@@ -127,12 +126,9 @@
     .filled-gray { background-color: #d3d3d3; border-color: #d3d3d3; }
     .filled-black { background-color: #000000; border-color: #000000; }
   
-.day.blank {
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
+.dots.empty {
+  min-height: 44px;
 }
-
 </style>
 </head>
 <body>
@@ -181,9 +177,6 @@
       for (let i = 0; i < totalCells; i++) {
         const cell = document.createElement("div");
         cell.className = "day";
-        if (!(i >= startDay && dateIndex <= lastDate)) {
-          cell.classList.add("blank");
-        }
 
         const dateIndex = i - startDay + 1;
         const label = document.createElement("div");
@@ -193,6 +186,7 @@
 
         const dots = document.createElement("div");
         dots.className = "dots";
+        if (!(i >= startDay && dateIndex <= lastDate)) dots.classList.add("empty");
 
         if (i >= startDay && dateIndex <= lastDate) {
           const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateIndex).padStart(2, '0')}`;
