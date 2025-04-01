@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ziary - 心情</title>
+  <title>Ziary - 心情月曆總覽</title>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="ziary-icon-192.png" type="image/png">
   <link rel="apple-touch-icon" href="ziary-icon-192.png">
@@ -126,10 +126,16 @@
     .filled-teal { background-color: #30BEBF; border-color: #30BEBF; }
     .filled-gray { background-color: #d3d3d3; border-color: #d3d3d3; }
     .filled-black { background-color: #000000; border-color: #000000; }
-  </style>
+  
+.day.empty {
+  border: none;
+  background: transparent;
+  visibility: hidden;
+}
+</style>
 </head>
 <body>
-  <h1>心情</h1>
+  <h1>心情月曆總覽</h1>
   <div class="link"><a href="ziary_home.html">🏠 回功能頁</a></div>
 
   <div>
@@ -174,6 +180,7 @@
       for (let i = 0; i < totalCells; i++) {
         const cell = document.createElement("div");
         cell.className = "day";
+        if (!(i >= startDay && dateIndex <= lastDate)) cell.classList.add("empty");
 
         const dateIndex = i - startDay + 1;
         const label = document.createElement("div");
