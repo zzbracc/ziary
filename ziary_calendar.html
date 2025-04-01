@@ -126,7 +126,14 @@
     .filled-teal { background-color: #30BEBF; border-color: #30BEBF; }
     .filled-gray { background-color: #d3d3d3; border-color: #d3d3d3; }
     .filled-black { background-color: #000000; border-color: #000000; }
-  </style>
+  
+.day.blank {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+</style>
 </head>
 <body>
   <h1>心情月曆總覽</h1>
@@ -174,6 +181,9 @@
       for (let i = 0; i < totalCells; i++) {
         const cell = document.createElement("div");
         cell.className = "day";
+        if (!(i >= startDay && dateIndex <= lastDate)) {
+          cell.classList.add("blank");
+        }
 
         const dateIndex = i - startDay + 1;
         const label = document.createElement("div");
