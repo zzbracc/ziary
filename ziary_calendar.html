@@ -126,6 +126,15 @@
 .dot {
   aspect-ratio: 1 / 1;
 }
+
+.date-dot {
+  font-size: 11px;
+  font-weight: bold;
+  color: #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 </style>
 </head>
 <body>
@@ -176,10 +185,7 @@
         cell.className = "day";
 
         const dateIndex = i - startDay + 1;
-        const label = document.createElement("div");
-        label.className = "date-label";
-        label.textContent = (i >= startDay && dateIndex <= lastDate) ? dateIndex : "";
-        cell.appendChild(label);
+        
 
         if (i >= startDay && dateIndex <= lastDate) {
           const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateIndex).padStart(2, '0')}`;
@@ -193,14 +199,23 @@
           const dots = document.createElement("div");
           dots.className = "dots";
 
-          allColors.forEach(color => {
+          
+          allColors.forEach((color, index) => {
             const dot = document.createElement("div");
             dot.className = "dot";
+
             if (selectedColors.includes(color)) {
               dot.classList.add(colorClassMap[color]);
             }
+
+            if (index === 4 && i >= startDay && dateIndex <= lastDate) {
+              dot.textContent = dateIndex;
+              dot.classList.add("date-dot");
+            }
+
             dots.appendChild(dot);
           });
+    
 
           cell.appendChild(dots);
         }
