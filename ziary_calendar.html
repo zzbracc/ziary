@@ -15,7 +15,23 @@
       navigator.serviceWorker.register('service-worker.js')
         .then(() => console.log("Service Worker Registered"));
     }
-  </script>
+  
+function closeModal() {
+  document.getElementById("modalOverlay").style.display = "none";
+}
+
+let currentEditDate = null;
+
+function closeModal() {
+  document.getElementById("modalOverlay").style.display = "none";
+}
+
+function editRecord() {
+  if (!currentEditDate) return;
+  localStorage.setItem("ziary-edit-date", currentEditDate);
+  window.location.href = "ziary_home.html";
+}
+</script>
   <style>
     html, body {
   scroll-behavior: smooth;
@@ -135,6 +151,52 @@
   align-items: center;
   justify-content: center;
 }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: #fffaf5;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 320px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+.modal h2 {
+  margin-top: 0;
+}
+
+.modal .dots {
+  margin: 8px 0;
+}
+
+.modal p {
+  font-size: 14px;
+  color: #333;
+}
+
+.modal button {
+  margin-top: 12px;
+  padding: 6px 12px;
+  font-size: 14px;
+  background: #30BEBF;
+  color: white;
+  border: none;
+  border-radius: 6px;
+}
 </style>
 </head>
 <body>
@@ -146,7 +208,20 @@
     <select id="year"></select>
   </div>
 
-  <div class="calendar-wrapper">
+  
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2 id="modalDate"></h2>
+    <div class="dots" id="modalDots"></div>
+    <p id="modalNote"></p>
+    
+<button onclick="editRecord()">編輯紀錄</button>
+<button onclick="closeModal()">關閉</button>
+
+  </div>
+</div>
+<div class="calendar-wrapper">
+
     <div id="calendar"></div>
   </div>
 
@@ -178,7 +253,11 @@
       let startDay = firstDay.getDay();
       startDay = startDay === 0 ? 6 : startDay - 1;
 
-      const totalCells = 42;
+      
+      const totalCellsNeeded = startDay + lastDate;
+      const totalRows = Math.ceil(totalCellsNeeded / 7);
+      const totalCells = totalRows * 7;
+    
 
       for (let i = 0; i < totalCells; i++) {
         const cell = document.createElement("div");
@@ -219,7 +298,36 @@
 
           cell.appendChild(dots);
         }
+        
         calendar.appendChild(cell);
+
+        // Modal 點擊事件
+        if (i >= startDay && dateIndex <= lastDate) {
+          cell.addEventListener("click", () => {
+            const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateIndex).padStart(2, '0')}`;
+            const entry = localStorage.getItem("ziary-" + fullDate);
+            if (entry) {
+              const data = JSON.parse(entry);
+              document.getElementById("modalDate").textContent = fullDate;
+              const modalDots = document.getElementById("modalDots");
+              modalDots.innerHTML = "";
+              allColors.forEach(color => {
+                const dot = document.createElement("div");
+                dot.className = "dot";
+                if (data.colors && data.colors.includes(color)) {
+                  dot.classList.add(colorClassMap[color]);
+                }
+                modalDots.appendChild(dot);
+              });
+              document.getElementById("modalNote").textContent = data.text || "";
+              
+              currentEditDate = fullDate;
+              document.getElementById("modalOverlay").style.display = "flex";
+    
+            }
+          });
+        }
+    
       }
     }
 
@@ -253,6 +361,22 @@
     yearSelect.addEventListener("change", () => {
       generateCalendar(Number(monthSelect.value), Number(yearSelect.value));
     });
-  </script>
+  
+function closeModal() {
+  document.getElementById("modalOverlay").style.display = "none";
+}
+
+let currentEditDate = null;
+
+function closeModal() {
+  document.getElementById("modalOverlay").style.display = "none";
+}
+
+function editRecord() {
+  if (!currentEditDate) return;
+  localStorage.setItem("ziary-edit-date", currentEditDate);
+  window.location.href = "ziary_home.html";
+}
+</script>
 </body>
 </html>

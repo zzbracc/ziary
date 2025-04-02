@@ -158,6 +158,14 @@
       });
     }
 
+    
+    const editDate = localStorage.getItem('ziary-edit-date');
+    if (editDate) {
+      dateInput.value = editDate;
+      loadEntry(editDate);
+      localStorage.removeItem('ziary-edit-date');
+    }
+
     function saveEntry() {
       const date = dateInput.value;
       if (!date) {
