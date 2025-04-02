@@ -146,7 +146,17 @@
     <select id="year"></select>
   </div>
 
-  <div class="calendar-wrapper">
+  
+<div class="modal-overlay" id="modalOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;z-index:999;">
+  <div class="modal" style="background:#fff;border-radius:12px;padding:16px;width:90%;max-width:340px;text-align:center;">
+    <h2 id="modalDate" style="margin-top:0;"></h2>
+    <div class="dots" id="modalEditDots"></div>
+    <textarea id="modalNoteInput" placeholder="輸入今天的文字記錄" style="width:100%;height:60px;margin-top:10px;"></textarea><br/>
+    <button onclick="saveModal()" style="margin-top:10px;background:#30BEBF;color:white;border:none;padding:6px 12px;border-radius:6px;">儲存</button>
+    <button onclick="closeModal()" style="margin-top:10px;">取消</button>
+  </div>
+</div>
+<div class="calendar-wrapper">
     <div id="calendar"></div>
   </div>
 
@@ -162,7 +172,58 @@
       teal: "filled-teal", gray: "filled-gray", black: "filled-black"
     };
 
-    function generateCalendar(month, year) {
+    
+let currentEditDate = null;
+let currentSelectedColors = [];
+
+function closeModal() {
+  document.getElementById("modalOverlay").style.display = "none";
+}
+
+function toggleColor(color) {
+  const idx = currentSelectedColors.indexOf(color);
+  if (idx > -1) {
+    currentSelectedColors.splice(idx, 1);
+  } else {
+    currentSelectedColors.push(color);
+  }
+  renderModalDots();
+}
+
+function renderModalDots() {
+  const modalDots = document.getElementById("modalEditDots");
+  modalDots.innerHTML = "";
+  allColors.forEach(color => {
+    const dot = document.createElement("div");
+    dot.className = "dot";
+    if (currentSelectedColors.includes(color)) {
+      dot.classList.add(colorClassMap[color]);
+    }
+    dot.addEventListener("click", () => toggleColor(color));
+    modalDots.appendChild(dot);
+  });
+}
+
+function openModal(fullDate, data) {
+  currentEditDate = fullDate;
+  currentSelectedColors = data.colors ? [...data.colors] : [];
+  renderModalDots();
+  document.getElementById("modalNoteInput").value = data.text || "";
+  document.getElementById("modalDate").textContent = fullDate;
+  document.getElementById("modalOverlay").style.display = "flex";
+}
+
+function saveModal() {
+  const data = {
+    colors: currentSelectedColors,
+    text: document.getElementById("modalNoteInput").value
+  };
+  localStorage.setItem("ziary-" + currentEditDate, JSON.stringify(data));
+  document.getElementById("modalOverlay").style.display = "none";
+  generateCalendar(Number(monthSelect.value), Number(yearSelect.value));
+}
+
+function generateCalendar(month, year) {
       calendar.innerHTML = "";
 
       const weekdays = ["一", "二", "三", "四", "五", "六", "日"];
@@ -223,7 +284,15 @@
 
           cell.appendChild(dots);
         }
-        calendar.appendChild(cell);
+        
+          cell.addEventListener("click", () => {
+            const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateIndex).padStart(2, '0')}`;
+            const entry = localStorage.getItem("ziary-" + fullDate);
+            const data = entry ? JSON.parse(entry) : { colors: [], text: "" };
+            openModal(fullDate, data);
+          });
+          calendar.appendChild(cell);
+    
       }
     }
 
