@@ -1,154 +1,118 @@
 
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <title>🎨 自訂配色</title>
-  
-
-
-
-<style>
-body {
-  font-family: 'Zen Maru Gothic', sans-serif;
-  background-color: #fffaf5;
-  padding: 20px 0;
-  margin: 0;
-  text-align: center;
-}
-
-h1 {
-  font-family: 'Nanum Pen Script', cursive;
-  font-size: 40px;
-  font-weight: normal;
-  margin: 24px 0 16px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  padding: 0 12px;
-  box-sizing: border-box;
-}
-
-.preview-dot {
-  width: 100%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  border: 2px solid #ccc;
-  background-color: white;
-  box-sizing: border-box;
-}
-
-input[type='color'] {
-  width: 100%;
-  aspect-ratio: 1;
-  transform: scale(0.7);
-  transform-origin: center;
-  border: none;
-  padding: 0;
-  appearance: none;
-  -webkit-appearance: none;
-  box-sizing: border-box;
-}
-
-/* 手機以下畫面可以縮小標題字 */
-@media (max-width: 480px) {
-  h1 {
-    font-size: 32px;
-    margin: 16px 0;
-  }
-  .grid {
-    gap: 10px;
-  }
-}
-
-/* 平板與小筆電適度調整 */
-@media (min-width: 768px) {
-  h1 {
-    font-size: 44px;
-  }
-  .grid {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-}
-</style>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ziary 自訂配色</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Zen+Maru+Gothic&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      background-color: #fffaf5;
+      padding: 20px;
+      margin: 0;
+      text-align: center;
+    }
+    h1 {
+      font-family: 'Nanum Pen Script', cursive;
+      font-size: 48px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding: 0 12px;
+      max-width: 600px;
+      margin: 0 auto 24px;
+    }
+    input[type='color'] {
+      background-color: currentColor;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      padding: 0;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1;
+      -webkit-appearance: none;
+      appearance: none;
+      cursor: pointer;
+      box-sizing: border-box;
+    }
+    input[type='color']::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+    input[type='color']::-webkit-color-swatch {
+      border: none;
+      border-radius: 50%;
+    }
+      appearance: none;
+      -webkit-appearance: none;
+      background: none;
+      border: 2px solid #ccc;
+      border-radius: 50%;
+      width: 100%;
+      aspect-ratio: 1;
+      padding: 0;
+      cursor: pointer;
+      box-sizing: border-box;
+    }
+    .buttons {
+      margin-top: 24px;
+    }
+    .buttons button {
+      font-size: 48px;
+      margin: 0 12px;
+      font-family: 'Zen Maru Gothic', sans-serif;
+    }
+  </style>
 </head>
 <body>
-  <h1 style="font-family: \'Nanum Pen Script\', cursive; font-size: 48px; text-align: center; margin-bottom: 24px;">🎨 自訂配色</h1>
-
-  <div id="dotGrid" class="grid" style="margin-bottom: 24px;"></div>
-<div id="pickerGrid" class="grid"></div>
-  
-
-  <button onclick="saveColors()" style="font-size: 48px; margin: 24px 12px 0;">儲存設定</button>
-  <button onclick="resetColors()" style="font-size: 48px; margin: 24px 12px 0;">預設值</button>
-
-  
-
-
-
-
-<input type="color" id="sharedColorPicker" style="position: fixed; top: 0; left: 0; opacity: 0.01; width: 1px; height: 1px; z-index: -1;" />
-
-
-
-
-<script>
-
-    const saved = JSON.parse(localStorage.getItem("ziary-colorMap") || "[]");
-    const dotGrid = document.getElementById("dotGrid");
-    const pickerGrid = document.getElementById("pickerGrid");
-
-    const colorInputs = [];
+  <h1>🎨 自訂配色</h1>
+  <div id="circleGrid" class="grid">
+    <!-- 9 顆圓圈 input -->
+    <input type="color" id="color0">
+    <input type="color" id="color1">
+    <input type="color" id="color2">
+    <input type="color" id="color3">
+    <input type="color" id="color4">
+    <input type="color" id="color5">
+    <input type="color" id="color6">
+    <input type="color" id="color7">
+    <input type="color" id="color8">
+  </div>
+  <div class="buttons">
+    <button onclick="saveColors()">儲存設定</button>
+    <button onclick="resetColors()">預設值</button>
+  </div>
+  <script>
+    const defaultColors = ['#CC5F5A', '#ff9933', '#FFD700', '#B5866C', '#BED06F', '#769EDB', '#30BEBF', '#d3d3d3', '#000000'];
+    let colorMap = JSON.parse(localStorage.getItem("ziary-colorMap") || "[]");
+    if (!Array.isArray(colorMap) || colorMap.length !== 9) colorMap = [...defaultColors];
 
     for (let i = 0; i < 9; i++) {
-      const color = saved[i] || "#cccccc";
-
-      // 建立上半部的圓圈
-      const dot = document.createElement("div");
-      dot.className = "preview-dot";
-      dot.style.backgroundColor = color;
-      dot.id = "dot-" + i;
-      dotGrid.appendChild(dot);
-
-      // 建立下半部的顏色選擇器
-      const wrapper = document.createElement("div");
-      wrapper.className = "color-picker";
-
-      const input = document.createElement("input");
-      input.type = "color";
-      input.value = color;
-      input.dataset.index = i;
-
+      const input = document.getElementById("color" + i);
+      input.value = colorMap[i];
       input.addEventListener("input", () => {
-        document.getElementById("dot-" + i).style.backgroundColor = input.value;
+        colorMap[i] = input.value;
+        localStorage.setItem("ziary-colorMap", JSON.stringify(colorMap));
       });
+    }
 
-      wrapper.appendChild(input);
-      pickerGrid.appendChild(wrapper);
-      colorInputs.push(input);
+    function resetColors() {
+      for (let i = 0; i < 9; i++) {
+        const input = document.getElementById("color" + i);
+        input.value = defaultColors[i];
+        colorMap[i] = defaultColors[i];
+      }
+      localStorage.setItem("ziary-colorMap", JSON.stringify(colorMap));
     }
 
     function saveColors() {
-      const colors = colorInputs.map(i => i.value);
-      localStorage.setItem("ziary-colorMap", JSON.stringify(colors));
-      alert("已儲存設定！");
+      localStorage.setItem("ziary-colorMap", JSON.stringify(colorMap));
     }
-  
-const defaultColors = ['#CC5F5A', '#ff9933', '#FFD700', '#B5866C', '#BED06F', '#769EDB', '#30BEBF', '#d3d3d3', '#000000'];
-
-function resetColors() {
-  colorInputs.forEach((input, i) => {
-    input.value = defaultColors[i];
-    document.getElementById("dot-" + i).style.backgroundColor = defaultColors[i];
-  });
-}
-
-
-</script>
+  </script>
 </body>
 </html>
