@@ -142,6 +142,24 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+/* 手勢滑動層樣式 */
+#gestureOverlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  background: transparent;
+  touch-action: pan-y pan-x;
+}
+@media (hover: none) and (pointer: coarse) {
+  #gestureOverlay {
+    display: block;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -335,20 +353,12 @@ function generateCalendar(month, year) {
     });
   </script>
 
-<script>
-if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-  const gesture = document.createElement('div');
-  gesture.id = 'gestureOverlay';
-  gesture.style.cssText = `
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    z-index: 1;
-    background: transparent;
-    touch-action: pan-y pan-x;
-  `;
-  document.body.appendChild(gesture);
+<div id="gestureOverlay"></div>
 
+
+<script>
+const gesture = document.getElementById('gestureOverlay');
+if (gesture) {
   gesture.addEventListener("touchstart", e => {
     startX = e.touches[0].clientX;
   }, { passive: true });
