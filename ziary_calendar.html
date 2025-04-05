@@ -22,10 +22,14 @@
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   touch-action: pan-y;
 }
 body {
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
       margin: 0;
       padding: 0;
@@ -59,6 +63,8 @@ body {
     .calendar-wrapper {
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   touch-action: pan-x;
       width: 100%;
       overflow-x: auto;
@@ -163,7 +169,9 @@ body {
     <button onclick="closeModal()" style="margin-top:10px;">取消</button>
   </div>
 </div>
-<div class="calendar-wrapper">
+
+<div class="gesture-wrapper" style="width:100%;height:100%;touch-action:pan-y pan-x;pointer-events:auto;">
+  <div class="calendar-wrapper">
     <div id="calendar"></div>
   </div>
 
@@ -334,5 +342,6 @@ function generateCalendar(month, year) {
       generateCalendar(Number(monthSelect.value), Number(yearSelect.value));
     });
   </script>
+</div>
 </body>
 </html>
