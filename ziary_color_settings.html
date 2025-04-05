@@ -17,6 +17,8 @@
       margin-bottom: 1rem;
     }
     .grid {
+  display: grid; grid-template-columns: repeat(3, 60px); grid-gap: 12px; justify-content: center; margin: 20px auto;
+
   max-width: 320px;
   margin: auto;
 
@@ -27,6 +29,8 @@
       margin-bottom: 2rem;
     }
     .preview-dot {
+  width: 60px; height: 60px; border-radius: 50%; border: 2px solid #ccc;
+
   width: 60px;
   height: 60px;
   flex-shrink: 0;
@@ -62,6 +66,8 @@
     gap: 10px;
   }
   .preview-dot {
+  width: 60px; height: 60px; border-radius: 50%; border: 2px solid #ccc;
+
   width: 60px;
   height: 60px;
   flex-shrink: 0;
@@ -73,8 +79,8 @@
 
 </style>
 </head>
-<body>
-  <h1 style="font-family: 'Nanum Pen Script', cursive; font-size: 24px; text-align: center;">🎨 自訂配色</h1>
+<body style="font-family: 'Zen Maru Gothic', sans-serif; background-color: #fffaf5; padding: 20px; text-align: center;">
+  <h1 style="font-family: 'Nanum Pen Script', cursive; font-size: 32px; margin-bottom: 10px;">🎨 自訂配色</h1>
 
   <div id="dotGrid" class="grid"></div>
   <div id="pickerGrid" class="grid"></div>
