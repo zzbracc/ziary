@@ -22,10 +22,16 @@
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-x pan-y;
   touch-action: pan-y;
 }
 body {
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-x pan-y;
   -webkit-overflow-scrolling: touch;
       margin: 0;
       padding: 0;
@@ -59,6 +65,9 @@ body {
     .calendar-wrapper {
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-x pan-y;
   touch-action: pan-x;
       width: 100%;
       overflow-x: auto;
@@ -142,24 +151,6 @@ body {
   align-items: center;
   justify-content: center;
 }
-
-/* 手勢滑動層樣式 */
-#gestureOverlay {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1;
-  background: transparent;
-  touch-action: pan-y pan-x;
-}
-@media (hover: none) and (pointer: coarse) {
-  #gestureOverlay {
-    display: block;
-  }
-}
-
 </style>
 </head>
 <body>
@@ -352,43 +343,5 @@ function generateCalendar(month, year) {
       generateCalendar(Number(monthSelect.value), Number(yearSelect.value));
     });
   </script>
-
-<div id="gestureOverlay"></div>
-
-
-<script>
-const gesture = document.getElementById('gestureOverlay');
-if (gesture) {
-  gesture.addEventListener("touchstart", e => {
-    startX = e.touches[0].clientX;
-  }, { passive: true });
-
-  gesture.addEventListener("touchend", e => {
-    endX = e.changedTouches[0].clientX;
-    const deltaX = endX - startX;
-    if (Math.abs(deltaX) > 50) {
-      const month = Number(monthSelect.value);
-      const year = Number(yearSelect.value);
-      if (deltaX > 0) {
-        if (month === 0) {
-          monthSelect.value = 11;
-          yearSelect.value = year - 1;
-        } else {
-          monthSelect.value = month - 1;
-        }
-      } else {
-        if (month === 11) {
-          monthSelect.value = 0;
-          yearSelect.value = year + 1;
-        } else {
-          monthSelect.value = month + 1;
-        }
-      }
-      generateCalendar(Number(monthSelect.value), Number(yearSelect.value));
-    }
-  }, { passive: true });
-}
-</script>
-
 </body>
 </html>
