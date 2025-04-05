@@ -13,26 +13,7 @@
         .then(() => console.log("Service Worker Registered"));
     }
   
-window.onload = () => {
-  const today = new Date().toISOString().slice(0, 10);
-  dateInput.value = today;
-  loadEntry(today);
 
-  circles.forEach((circle, i) => {
-    circle.style.borderColor = getColorHex(i);
-    circle.style.backgroundColor = "white";
-
-    circle.addEventListener("click", () => {
-      if (circle.classList.contains("selected")) {
-        circle.classList.remove("selected");
-        circle.style.backgroundColor = "white";
-      } else {
-        circle.classList.add("selected");
-        circle.style.backgroundColor = getColorHex(i);
-      }
-    });
-  });
-};
 
 function setSelectedColors(colors) {
   circles.forEach((circle, i) => {
@@ -45,6 +26,26 @@ function setSelectedColors(colors) {
     }
   });
 }
+
+
+window.onload = () => {
+  const circles = document.querySelectorAll('.circle');
+  circles.forEach((circle, i) => {
+    circle.style.borderColor = getColorHex(i);
+    circle.style.backgroundColor = "white";
+    circle.classList.remove("selected");
+
+    circle.addEventListener("click", () => {
+      if (circle.classList.contains("selected")) {
+        circle.classList.remove("selected");
+        circle.style.backgroundColor = "white";
+      } else {
+        circle.classList.add("selected");
+        circle.style.backgroundColor = getColorHex(i);
+      }
+    });
+  });
+};
 
 </script>
 
@@ -148,26 +149,7 @@ const userColorMap = JSON.parse(localStorage.getItem("ziary-colorMap") || "[]");
 const fallbackColorMap = ['#CC5F5A', '#ff9933', '#FFD700', '#B5866C', '#BED06F', '#769EDB', '#30BEBF', '#d3d3d3', '#000000'];
 const getColorHex = (i) => userColorMap[i] || fallbackColorMap[i];
 
-window.onload = () => {
-  const today = new Date().toISOString().slice(0, 10);
-  dateInput.value = today;
-  loadEntry(today);
 
-  circles.forEach((circle, i) => {
-    circle.style.borderColor = getColorHex(i);
-    circle.style.backgroundColor = "white";
-
-    circle.addEventListener("click", () => {
-      if (circle.classList.contains("selected")) {
-        circle.classList.remove("selected");
-        circle.style.backgroundColor = "white";
-      } else {
-        circle.classList.add("selected");
-        circle.style.backgroundColor = getColorHex(i);
-      }
-    });
-  });
-};
 
 function setSelectedColors(colors) {
   circles.forEach((circle, i) => {
@@ -180,6 +162,26 @@ function setSelectedColors(colors) {
     }
   });
 }
+
+
+window.onload = () => {
+  const circles = document.querySelectorAll('.circle');
+  circles.forEach((circle, i) => {
+    circle.style.borderColor = getColorHex(i);
+    circle.style.backgroundColor = "white";
+    circle.classList.remove("selected");
+
+    circle.addEventListener("click", () => {
+      if (circle.classList.contains("selected")) {
+        circle.classList.remove("selected");
+        circle.style.backgroundColor = "white";
+      } else {
+        circle.classList.add("selected");
+        circle.style.backgroundColor = getColorHex(i);
+      }
+    });
+  });
+};
 
 </script>
 
@@ -270,26 +272,7 @@ function setSelectedColors(colors) {
       });
     });
   
-window.onload = () => {
-  const today = new Date().toISOString().slice(0, 10);
-  dateInput.value = today;
-  loadEntry(today);
 
-  circles.forEach((circle, i) => {
-    circle.style.borderColor = getColorHex(i);
-    circle.style.backgroundColor = "white";
-
-    circle.addEventListener("click", () => {
-      if (circle.classList.contains("selected")) {
-        circle.classList.remove("selected");
-        circle.style.backgroundColor = "white";
-      } else {
-        circle.classList.add("selected");
-        circle.style.backgroundColor = getColorHex(i);
-      }
-    });
-  });
-};
 
 function setSelectedColors(colors) {
   circles.forEach((circle, i) => {
@@ -302,6 +285,26 @@ function setSelectedColors(colors) {
     }
   });
 }
+
+
+window.onload = () => {
+  const circles = document.querySelectorAll('.circle');
+  circles.forEach((circle, i) => {
+    circle.style.borderColor = getColorHex(i);
+    circle.style.backgroundColor = "white";
+    circle.classList.remove("selected");
+
+    circle.addEventListener("click", () => {
+      if (circle.classList.contains("selected")) {
+        circle.classList.remove("selected");
+        circle.style.backgroundColor = "white";
+      } else {
+        circle.classList.add("selected");
+        circle.style.backgroundColor = getColorHex(i);
+      }
+    });
+  });
+};
 
 </script>
 </body>
