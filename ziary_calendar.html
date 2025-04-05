@@ -205,6 +205,8 @@ function renderModalDots() {
 }
 
 function openModal(fullDate, data) {
+  document.getElementById("modalNoteInput").value = data.text || "";
+
   currentEditDate = fullDate;
   currentSelectedColors = data.colors ? [...data.colors] : [];
   renderModalDots();
@@ -286,6 +288,10 @@ function generateCalendar(month, year) {
         }
         
           cell.addEventListener("click", () => {
+        const entry = localStorage.getItem("ziary-" + fullDate);
+        const data = entry ? JSON.parse(entry) : { colors: [], text: "" };
+        openModal(fullDate, data);
+    
             const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateIndex).padStart(2, '0')}`;
             const entry = localStorage.getItem("ziary-" + fullDate);
             const data = entry ? JSON.parse(entry) : { colors: [], text: "" };
