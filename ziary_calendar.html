@@ -206,7 +206,7 @@ function renderModalDots() {
     if (currentSelectedColors.includes(color)) {
       dot.classList.add(colorClassMap[color]);
     }
-    dot.style.borderColor = getColorHex(index);
+    dot.style.borderColor = getColorHex(allColors.indexOf(color));
         dot.addEventListener("click", () => toggleColor(color));
     modalDots.appendChild(dot);
   });
@@ -278,8 +278,8 @@ function generateCalendar(month, year) {
             dot.className = "dot";
 
             if (selectedColors.includes(color)) {
-              dot.style.backgroundColor = getColorHex(index);
-              dot.style.borderColor = getColorHex(index);
+              dot.style.backgroundColor = getColorHex(allColors.indexOf(color));
+              dot.style.borderColor = getColorHex(allColors.indexOf(color));
               dot.classList.add(colorClassMap[color]);
             }
 
