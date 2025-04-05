@@ -136,6 +136,13 @@
   justify-content: center;
 }
 </style>
+
+<script>
+const userColorMap = JSON.parse(localStorage.getItem("ziary-colorMap") || "[]");
+const fallbackColorMap = ["#CC5F5A", "#ff9933", "#FFD700", "#B5866C", "#BED06F", "#769EDB", "#30BEBF", "#d3d3d3", "#000000"];
+const getColorHex = (i) => userColorMap[i] || fallbackColorMap[i];
+</script>
+
 </head>
 <body>
   <h1>心情月曆總覽</h1>
@@ -199,7 +206,8 @@ function renderModalDots() {
     if (currentSelectedColors.includes(color)) {
       dot.classList.add(colorClassMap[color]);
     }
-    dot.addEventListener("click", () => toggleColor(color));
+    dot.style.borderColor = getColorHex(index);
+        dot.addEventListener("click", () => toggleColor(color));
     modalDots.appendChild(dot);
   });
 }
@@ -270,6 +278,8 @@ function generateCalendar(month, year) {
             dot.className = "dot";
 
             if (selectedColors.includes(color)) {
+              dot.style.backgroundColor = getColorHex(index);
+              dot.style.borderColor = getColorHex(index);
               dot.classList.add(colorClassMap[color]);
             }
 

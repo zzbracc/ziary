@@ -26,6 +26,13 @@
       margin: 20px auto;
     }
   </style>
+
+<script>
+const userColorMap = JSON.parse(localStorage.getItem("ziary-colorMap") || "[]");
+const fallbackColorMap = ["#CC5F5A", "#ff9933", "#FFD700", "#B5866C", "#BED06F", "#769EDB", "#30BEBF", "#d3d3d3", "#000000"];
+const getColorHex = (i) => userColorMap[i] || fallbackColorMap[i];
+</script>
+
 </head>
 <body>
 <h2 style="text-align: center; margin-top: 1rem;">📊 心情統計圖表</h2>
@@ -49,6 +56,11 @@
     };
 
     const colorHex = {
+  red: getColorHex(0), orange: getColorHex(1), yellow: getColorHex(2),
+  brown: getColorHex(3), green: getColorHex(4), blue: getColorHex(5),
+  teal: getColorHex(6), gray: getColorHex(7), black: getColorHex(8)
+};
+//
       red: "#CC5F5A", orange: "#ff9933", yellow: "#FFD700",
       brown: "#B5866C", green: "#BED06F", blue: "#769EDB",
       teal: "#30BEBF", gray: "#d3d3d3", black: "#000000"

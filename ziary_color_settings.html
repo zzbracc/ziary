@@ -52,6 +52,7 @@
   <div id="pickerGrid" class="grid"></div>
 
   <button onclick="saveColors()">儲存設定</button>
+  <button onclick="resetColors()">返回預設值</button>
 
   <script>
     const saved = JSON.parse(localStorage.getItem("ziary-colorMap") || "[]");
@@ -93,6 +94,16 @@
       localStorage.setItem("ziary-colorMap", JSON.stringify(colors));
       alert("已儲存設定！");
     }
-  </script>
+  
+const defaultColors = ['#CC5F5A', '#ff9933', '#FFD700', '#B5866C', '#BED06F', '#769EDB', '#30BEBF', '#d3d3d3', '#000000'];
+
+function resetColors() {
+  colorInputs.forEach((input, i) => {
+    input.value = defaultColors[i];
+    document.getElementById("dot-" + i).style.backgroundColor = defaultColors[i];
+  });
+}
+
+</script>
 </body>
 </html>
