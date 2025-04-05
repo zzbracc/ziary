@@ -81,6 +81,7 @@ input[type='color'] {
   <h1 style="font-family: \'Nanum Pen Script\', cursive; font-size: 48px; text-align: center; margin-bottom: 24px;">🎨 自訂配色</h1>
 
   <div id="dotGrid" class="grid" style="margin-bottom: 24px;"></div>
+<div id="pickerGrid" class="grid"></div>
   
 
   <button onclick="saveColors()" style="font-size: 48px; margin: 24px 12px 0;">儲存設定</button>
@@ -94,52 +95,60 @@ input[type='color'] {
 <input type="color" id="sharedColorPicker" style="position: fixed; top: 0; left: 0; opacity: 0.01; width: 1px; height: 1px; z-index: -1;" />
 
 
+
+
 <script>
+
+    const saved = JSON.parse(localStorage.getItem("ziary-colorMap") || "[]");
+    const dotGrid = document.getElementById("dotGrid");
+    const pickerGrid = document.getElementById("pickerGrid");
+
+    const colorInputs = [];
+
+    for (let i = 0; i < 9; i++) {
+      const color = saved[i] || "#cccccc";
+
+      // 建立上半部的圓圈
+      const dot = document.createElement("div");
+      dot.className = "preview-dot";
+      dot.style.backgroundColor = color;
+      dot.id = "dot-" + i;
+      dotGrid.appendChild(dot);
+
+      // 建立下半部的顏色選擇器
+      const wrapper = document.createElement("div");
+      wrapper.className = "color-picker";
+
+      const input = document.createElement("input");
+      input.type = "color";
+      input.value = color;
+      input.dataset.index = i;
+
+      input.addEventListener("input", () => {
+        document.getElementById("dot-" + i).style.backgroundColor = input.value;
+      });
+
+      wrapper.appendChild(input);
+      pickerGrid.appendChild(wrapper);
+      colorInputs.push(input);
+    }
+
+    function saveColors() {
+      const colors = colorInputs.map(i => i.value);
+      localStorage.setItem("ziary-colorMap", JSON.stringify(colors));
+      alert("已儲存設定！");
+    }
+  
 const defaultColors = ['#CC5F5A', '#ff9933', '#FFD700', '#B5866C', '#BED06F', '#769EDB', '#30BEBF', '#d3d3d3', '#000000'];
-let colorMap = JSON.parse(localStorage.getItem("ziary-colorMap") || "[]");
-if (!Array.isArray(colorMap) || colorMap.length !== 9) colorMap = [...defaultColors];
-
-const dotGrid = document.getElementById("dotGrid");
-const picker = document.getElementById("sharedColorPicker");
-let currentIndex = null;
-
-for (let i = 0; i < 9; i++) {
-  const dot = document.createElement("div");
-  dot.className = "preview-dot";
-  dot.style.backgroundColor = colorMap[i];
-  dot.id = "dot-" + i;
-
-  dot.addEventListener("click", () => {
-    currentIndex = i;
-    picker.value = colorMap[i];
-    picker.click();
-  });
-
-  dotGrid.appendChild(dot);
-}
-
-picker.addEventListener("input", () => {
-  if (currentIndex !== null) {
-    const newColor = picker.value;
-    colorMap[currentIndex] = newColor;
-    document.getElementById("dot-" + currentIndex).style.backgroundColor = newColor;
-    localStorage.setItem("ziary-colorMap", JSON.stringify(colorMap));
-  }
-});
 
 function resetColors() {
-  for (let i = 0; i < 9; i++) {
-    colorMap[i] = defaultColors[i];
-    const dot = document.getElementById("dot-" + i);
-    dot.style.backgroundColor = defaultColors[i];
-  }
-  localStorage.setItem("ziary-colorMap", JSON.stringify(colorMap));
+  colorInputs.forEach((input, i) => {
+    input.value = defaultColors[i];
+    document.getElementById("dot-" + i).style.backgroundColor = defaultColors[i];
+  });
 }
 
-function saveColors() {
-  localStorage.setItem("ziary-colorMap", JSON.stringify(colorMap));
-}
+
 </script>
-
 </body>
 </html>
