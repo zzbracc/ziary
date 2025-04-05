@@ -28,18 +28,16 @@
   </style>
 </head>
 <body>
+<h2 style="text-align: center; margin-top: 1rem;">📊 心情統計圖表</h2>
 
-<div style="margin-bottom: 1rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
-  <label>開始月份：
-    <input type="month" id="startMonth">
-  </label>
-  <label>結束月份：
-    <input type="month" id="endMonth">
-  </label>
+<div style="margin-bottom: 1rem; display: flex; justify-content: center; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+  <input type="month" id="startMonth">
+  <span>至</span>
+  <input type="month" id="endMonth">
   <button onclick="updateStats()">重新統計</button>
 </div>
 
-  <h1>📊 心情統計圖表</h1>
+  
   <canvas id="pieChart"></canvas>
   <canvas id="barChart"></canvas>
 
