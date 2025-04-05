@@ -24,11 +24,11 @@
       margin-bottom: 2rem;
     }
     .preview-dot {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      border: 1px solid #ccc;
-    }
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+}
     .color-picker {
       display: flex;
       flex-direction: column;
@@ -43,10 +43,27 @@
       margin-left: auto;
       margin-right: auto;
     }
-  </style>
+  
+@media (max-width: 600px) {
+  h1 {
+    font-size: 24px !important;
+  }
+  .preview-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  .preview-dot {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+</style>
 </head>
 <body>
-  <h1 style="text-align: center;">🎨 自訂配色</h1>
+  <h1 style="text-align: center; font-family:'Nanum Pen Script', cursive; font-size: 32px;">🎨 自訂配色</h1>
 
   <div id="dotGrid" class="grid"></div>
   <div id="pickerGrid" class="grid"></div>
