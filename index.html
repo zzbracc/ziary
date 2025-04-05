@@ -219,11 +219,11 @@ window.onload = () => {
     const noteInput = document.getElementById('note');
     const circles = document.querySelectorAll('.circle');
 
-    function getSelectedColors() {
-      return Array.from(circles)
-        .filter(circle => circle.className.includes('selected-'))
-        .map(circle => circle.dataset.color);
-    }
+    
+function getSelectedColors() {
+  return [...document.querySelectorAll('.circle.selected')].map(c => c.dataset.color);
+}
+
 
     function setSelectedColors(colors) {
       circles.forEach(circle => {
