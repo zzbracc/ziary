@@ -224,7 +224,7 @@ function openModal(fullDate, data) {
 function saveModal() {
   const data = {
     colors: currentSelectedColors,
-    text: document.getElementById("modalNoteInput").value
+    note: document.getElementById("modalNoteInput").value
   };
   localStorage.setItem("ziary-" + currentEditDate, JSON.stringify(data));
   document.getElementById("modalOverlay").style.display = "none";
@@ -298,7 +298,15 @@ function generateCalendar(month, year) {
           cell.addEventListener("click", () => {
             const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateIndex).padStart(2, '0')}`;
             const entry = localStorage.getItem("ziary-" + fullDate);
-            const data = entry ? JSON.parse(entry) : { colors: [], note: "" };
+            
+    let data = { colors: [], note: "" };
+    if (entry) {
+      data = JSON.parse(entry);
+      if (data.text && !data.note) {
+        data.note = data.text;
+      }
+    }
+    
             openModal(fullDate, data);
           });
           calendar.appendChild(cell);
