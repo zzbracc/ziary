@@ -24,11 +24,11 @@
       margin-bottom: 2rem;
     }
     .preview-dot {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: 2px solid #ccc;
-}
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 1px solid #ccc;
+    }
     .color-picker {
       display: flex;
       flex-direction: column;
@@ -43,33 +43,15 @@
       margin-left: auto;
       margin-right: auto;
     }
-  
-@media (max-width: 600px) {
-  h1 {
-    font-size: 24px !important;
-  }
-  .preview-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-  }
-  .preview-dot {
-    width: 50px;
-    height: 50px;
-  }
-}
-
-</style>
+  </style>
 </head>
 <body>
-  <h1 style="font-family: 'Nanum Pen Script', cursive; font-size: 24px; text-align: center;">🎨 自訂配色</h1>
+  <h2>🎨 自訂配色</h2>
 
   <div id="dotGrid" class="grid"></div>
   <div id="pickerGrid" class="grid"></div>
 
   <button onclick="saveColors()">儲存設定</button>
-  <button onclick="resetColors()">返回預設值</button>
 
   <script>
     const saved = JSON.parse(localStorage.getItem("ziary-colorMap") || "[]");
@@ -111,16 +93,6 @@
       localStorage.setItem("ziary-colorMap", JSON.stringify(colors));
       alert("已儲存設定！");
     }
-  
-const defaultColors = ['#CC5F5A', '#ff9933', '#FFD700', '#B5866C', '#BED06F', '#769EDB', '#30BEBF', '#d3d3d3', '#000000'];
-
-function resetColors() {
-  colorInputs.forEach((input, i) => {
-    input.value = defaultColors[i];
-    document.getElementById("dot-" + i).style.backgroundColor = defaultColors[i];
-  });
-}
-
-</script>
+  </script>
 </body>
 </html>
