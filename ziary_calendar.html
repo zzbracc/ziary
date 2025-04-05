@@ -205,12 +205,12 @@ function renderModalDots() {
 }
 
 function openModal(fullDate, data) {
-  document.getElementById("modalNoteInput").value = data.text || "";
+  document.getElementById("modalNoteInput").value = data.note || "";
 
   currentEditDate = fullDate;
   currentSelectedColors = data.colors ? [...data.colors] : [];
   renderModalDots();
-  document.getElementById("modalNoteInput").value = data.text || "";
+  document.getElementById("modalNoteInput").value = data.note || "";
   document.getElementById("modalDate").textContent = fullDate;
   document.getElementById("modalOverlay").style.display = "flex";
 }
