@@ -76,7 +76,7 @@
     const container = document.getElementById("entries");
 
     const keys = Object.keys(localStorage)
-      .filter(k => k.startsWith("ziary-"))
+      .filter(k => k.startsWith("ziary-") && !k.includes("colorMap"))
       .sort()
       .reverse();
 
