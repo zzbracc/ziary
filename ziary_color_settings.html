@@ -29,14 +29,19 @@
       margin: 0 auto 24px;
     }
     input[type='color'] {
-  background-color: currentColor;
-  border-radius: 50%;
-  border: 2px solid #ccc;
-  padding: 0;
   width: 100%;
   aspect-ratio: 1 / 1;
   height: auto;
-  -webkit-appearance: none;}
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  background-color: currentColor;
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
     input[type='color']::-webkit-color-swatch-wrapper {
       padding: 0;
     }
