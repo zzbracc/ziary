@@ -1,12 +1,13 @@
 
 <!DOCTYPE html>
+
 <html lang="zh-TW">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="UTF-8" />
-  <title>心情列表（日記）</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Zen+Maru+Gothic&display=swap" rel="stylesheet">
-  <style>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<title>心情列表（日記）</title>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&amp;family=Zen+Maru+Gothic&amp;display=swap" rel="stylesheet"/>
+<style>
     body {
       font-family: 'Zen Maru Gothic', sans-serif;
       background-color: #fffaf5;
@@ -68,10 +69,51 @@
   </style>
 </head>
 <body>
-  <h1>📋 心情列表（日記）</h1>
-  <div id="entries"></div>
+<h1>📋 心情列表（日記）</h1>
+<div id="colorFilter" style="margin: 10px auto 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;">
+<div class="dot red" data-color="red" style="cursor:pointer;" title="red"></div>
+<div class="dot orange" data-color="orange" style="cursor:pointer;" title="orange"></div>
+<div class="dot yellow" data-color="yellow" style="cursor:pointer;" title="yellow"></div>
+<div class="dot brown" data-color="brown" style="cursor:pointer;" title="brown"></div>
+<div class="dot green" data-color="green" style="cursor:pointer;" title="green"></div>
+<div class="dot blue" data-color="blue" style="cursor:pointer;" title="blue"></div>
+<div class="dot teal" data-color="teal" style="cursor:pointer;" title="teal"></div>
+<div class="dot gray" data-color="gray" style="cursor:pointer;" title="gray"></div>
+<div class="dot black" data-color="black" style="cursor:pointer;" title="black"></div>
+<button onclick="resetColorFilter()" style="margin-left: 10px; padding: 4px 12px;">篩選</button>
+</div>
+<div style="margin-bottom: 20px;">
+<input id="searchInput" placeholder="🔍 搜尋文字" style="padding: 8px; font-size: 16px; width: 80%; max-width: 400px; border-radius: 8px; border: 1px solid #ccc;" type="text"/>
+</div>
+<div id="dateFilter" style="margin: 20px auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;">
+<input id="startDate" style="padding: 4px 8px; font-size: 16px; border-radius: 6px; border: 1px solid #ccc;" type="date"/>
+<span>至</span>
+<input id="endDate" style="padding: 4px 8px; font-size: 16px; border-radius: 6px; border: 1px solid #ccc;" type="date"/>
+<button onclick="filterEntries()" style="padding: 6px 12px;">篩選</button>
+<button onclick="resetDateFilter()" style="padding: 6px 12px;">清除</button>
+</div>
+<script>
+  document.getElementById('searchInput').addEventListener('input', function() {
+    const keyword = this.value.trim().toLowerCase();
+    document.querySelectorAll('.entry').forEach(entry => {
+      const note = entry.querySelector('.note')?.textContent.toLowerCase() || '';
+      const date = entry.querySelector('h3')?.textContent.toLowerCase() || '';
+      const colorClasses = Array.from(entry.querySelectorAll('.dot'))
+        .filter(dot => dot.classList.length > 1)
+        .map(dot => dot.classList[1])
+        .join(" ");
+      const colors = colorClasses.toLowerCase();
 
-  <script>
+      if (note.includes(keyword) || date.includes(keyword) || colors.includes(keyword)) {
+        entry.style.display = '';
+      } else {
+        entry.style.display = 'none';
+      }
+    });
+  });
+</script>
+<div id="entries"></div>
+<script>
     const colors = ["red", "orange", "yellow", "brown", "green", "blue", "teal", "gray", "black"];
     const container = document.getElementById("entries");
 
@@ -111,5 +153,66 @@
       container.appendChild(div);
     });
   </script>
+
+<script>
+  let selectedColors = new Set();
+
+  document.querySelectorAll('#colorFilter .dot').forEach(dot => {
+    dot.addEventListener('click', function () {
+      const color = this.dataset.color;
+      if (selectedColors.has(color)) {
+        selectedColors.delete(color);
+        this.style.outline = '';
+      } else {
+        selectedColors.add(color);
+        this.style.outline = '3px solid #555';
+      }
+      applyFilters();
+    });
+  });
+
+  function resetColorFilter() {
+    selectedColors.clear();
+    document.querySelectorAll('#colorFilter .dot').forEach(dot => {
+      dot.style.outline = '';
+    });
+    applyFilters();
+  }
+
+  function resetDateFilter() {
+    document.getElementById('startDate').value = '';
+    document.getElementById('endDate').value = '';
+    applyFilters();
+  }
+
+  function filterEntries() {
+    applyFilters();
+  }
+
+  function applyFilters() {
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+
+    document.querySelectorAll('.entry').forEach(entry => {
+      const dateText = entry.querySelector('h3')?.textContent || '';
+      const note = entry.querySelector('.note')?.textContent.toLowerCase() || '';
+      const dateOk = (!startDate || dateText >= startDate) && (!endDate || dateText <= endDate);
+
+      const dots = Array.from(entry.querySelectorAll('.dot'));
+      const colorMatches = Array.from(selectedColors).every(c =>
+        dots.some(d => d.classList.contains(c))
+      );
+
+      const colorOk = selectedColors.size === 0 || colorMatches;
+
+      if (dateOk && colorOk) {
+        entry.style.display = '';
+      } else {
+        entry.style.display = 'none';
+      }
+    });
+  }
+</script>
+
 </body>
 </html>
