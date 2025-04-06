@@ -61,6 +61,46 @@
       link.download = "ziary_records.csv";
       link.click();
     }
-  </script>
+  
+function importCSV() {
+  const fileInput = document.getElementById('importFile');
+  const file = fileInput.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const text = e.target.result;
+      const lines = text.split(/\r?\n/).filter(l => l.trim());
+      if (lines.length < 2) throw new Error("格式錯誤");
+
+      lines.shift(); // 去除標題列
+      lines.forEach(line => {
+        const [date, colorsStr, note] = line.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(s => s.replace(/^"|"$/g, ''));
+        const key = `ziary-${date}`;
+        const value = {
+          colors: colorsStr.split(",").filter(c => c.trim()),
+          note: note || ""
+        };
+        localStorage.setItem(key, JSON.stringify(value));
+      });
+
+      document.getElementById("importStatus").textContent = "✅ 匯入成功！可回首頁查看紀錄";
+    } catch (err) {
+      document.getElementById("importStatus").textContent = "⚠️ 匯入失敗，檔案格式錯誤";
+    }
+  };
+  reader.readAsText(file, 'utf-8');
+}
+
+</script>
+
+<hr style="margin: 40px 0;">
+<h1>📥 匯入心情紀錄</h1>
+<p>請選擇先前匯出的 CSV 檔案（ziary_records.csv）：</p>
+<input type="file" id="importFile" accept=".csv" />
+<button onclick="importCSV()">匯入資料</button>
+<p id="importStatus" style="margin-top: 10px; color: green;"></p>
+
 </body>
 </html>
