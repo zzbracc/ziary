@@ -1,13 +1,12 @@
 
 <!DOCTYPE html>
-
 <html lang="zh-TW">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Ziary 自訂配色</title>
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&amp;family=Zen+Maru+Gothic&amp;display=swap" rel="stylesheet"/>
-<style>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Ziary 自訂配色</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Zen+Maru+Gothic&display=swap" rel="stylesheet"/>
+  <style>
     body {
       font-family: 'Zen Maru Gothic', sans-serif;
       background-color: #fffaf5;
@@ -18,7 +17,6 @@
     h1 {
       font-family: 'Nanum Pen Script', cursive;
       font-size: 48px;
-      text-align: center;
       margin-bottom: 24px;
     }
     .grid {
@@ -30,144 +28,99 @@
       max-width: 600px;
       margin: 0 auto 24px;
     }
-    input[type='color'] {
-  background-color: currentColor;
-  border-radius: 50%;
-  border: 2px solid #ccc;
-  padding: 0;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  height: auto;
-  -webkit-appearance: none;}
-    input[type='color']::-webkit-color-swatch-wrapper {
-      padding: 0;
-    }
-    input[type='color']::-webkit-color-swatch {
-      border: none;
+    .circle-wrapper {
+      width: 64px;
+      height: 64px;
       border-radius: 50%;
-    }}
-    .buttons {
-      margin-top: 24px;
+      overflow: hidden;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      margin: 6px;
+      position: relative;
     }
-    .buttons button {
-  font-size: 30px;
-  margin: 0 12px;
-  font-family: 'Zen Maru Gothic', sans-serif;
-}
-  
-.circle-wrapper {
-  width: 64px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 64px;
-  border-radius: 50%;
-  overflow: hidden;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  margin: 6px;
-}
-.circle-wrapper input[type='color'] {
-  width: 100%;
-  height: 100%;
-  border: none;
-  padding: 0;
-  appearance: none;
-  -webkit-appearance: none;
-  background: none;
-  cursor: pointer;
-}
-
-
-
-.label {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(255, 255, 255, 0.8);
-  color: #333;
-  font-size: 12px;
-  padding: 2px 6px;
-  border-radius: 12px;
-  pointer-events: none;
-  font-family: 'Zen Maru Gothic', sans-serif;
-  max-width: 80%;
-  text-align: center;
-  white-space: nowrap;
-  
-}
-
-.circle-wrapper {
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.dot {
-  aspect-ratio: 1 / 1;
-  display: inline-block;
-}
-
-.edit-button {
-  position: fixed;
-  bottom: 16px;
-  left: 16px;
-  font-size: 24px;
-  padding: 8px 12px;
-  border-radius: 12px;
-  background-color: #30BEBF;
-  color: white;
-  border: none;
-  z-index: 1000;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-
-#labelModal {
-  position: fixed;
-  top: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  background: white;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  display: none;
-  z-index: 1001;
-  max-width: 90%;
-}
-#labelModal h2 {
-  font-size: 20px;
-  font-family: 'Nanum Pen Script', cursive;
-}
-.label-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-.label-row .dot {
-  width: 20px;
-  height: 20px;
-}
-#labelModal input {
-  flex: 1;
-  padding: 4px 8px;
-  font-size: 14px;
-}
-#closeModal {
-  margin-top: 10px;
-  background: #ccc;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 12px;
-}
-</style>
+    input[type='color'] {
+      width: 100%;
+      height: 100%;
+      border: none;
+      padding: 0;
+      appearance: none;
+      -webkit-appearance: none;
+      background: none;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+    .label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.9);
+      color: #000;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 12px;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      max-width: 80%;
+      text-align: center;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .edit-button {
+      position: fixed;
+      bottom: 16px;
+      left: 16px;
+      font-size: 24px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      background-color: #30BEBF;
+      color: white;
+      border: none;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    #labelModal {
+      position: fixed;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      display: none;
+      z-index: 1001;
+      max-width: 90%;
+    }
+    .label-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .label-row .dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1px solid #aaa;
+    }
+    #labelModal input {
+      flex: 1;
+      padding: 4px 8px;
+      font-size: 14px;
+    }
+    #closeModal {
+      margin-top: 10px;
+      background: #ccc;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+    }
+  </style>
 </head>
 <body>
-<h1>🎨 自訂配色</h1>
-<div class="grid" id="circleGrid">
-<!-- 9 顆圓圈 input -->
+  <h1>🎨 自訂配色</h1>
+  <div class="grid" id="circleGrid">
 <div class="circle-wrapper" data-index="0"><input id="color0" type="color"/><span class="label" id="label0"></span></div>
 <div class="circle-wrapper" data-index="1"><input id="color1" type="color"/><span class="label" id="label1"></span></div>
 <div class="circle-wrapper" data-index="2"><input id="color2" type="color"/><span class="label" id="label2"></span></div>
@@ -177,12 +130,18 @@
 <div class="circle-wrapper" data-index="6"><input id="color6" type="color"/><span class="label" id="label6"></span></div>
 <div class="circle-wrapper" data-index="7"><input id="color7" type="color"/><span class="label" id="label7"></span></div>
 <div class="circle-wrapper" data-index="8"><input id="color8" type="color"/><span class="label" id="label8"></span></div>
-</div>
-<div class="buttons">
-<button onclick="saveColors()">儲存</button>
-<button onclick="resetColors()">預設</button>
-</div>
-<script>
+  </div>
+  <div class="buttons">
+    <button onclick="saveColors()">儲存</button>
+    <button onclick="resetColors()">預設</button>
+  </div>
+  <button class="edit-button" onclick="openModal()">✏️</button>
+  <div id="labelModal">
+    <h2>編輯顏色標籤</h2>
+    <div id="labelInputs"></div>
+    <button id="closeModal" onclick="closeModal()">關閉</button>
+  </div>
+  <script>
     const defaultColors = ['#CC5F5A', '#ff9933', '#FFD700', '#B5866C', '#BED06F', '#769EDB', '#30BEBF', '#d3d3d3', '#000000'];
     let colorMap = JSON.parse(localStorage.getItem("ziary-colorMap") || "[]");
     if (!Array.isArray(colorMap) || colorMap.length !== 9) colorMap = [...defaultColors];
@@ -208,75 +167,43 @@
     function saveColors() {
       localStorage.setItem("ziary-colorMap", JSON.stringify(colorMap));
     }
+
+    let colorLabels = JSON.parse(localStorage.getItem("ziary-colorLabels") || "[]");
+    if (!Array.isArray(colorLabels) || colorLabels.length !== 9) colorLabels = ["", "", "", "", "", "", "", "", ""];
+    window.addEventListener("DOMContentLoaded", () => {
+      for (let i = 0; i < 9; i++) {
+        const label = document.getElementById("label" + i);
+        if (label) label.textContent = colorLabels[i];
+      }
+    });
+
+    function openModal() {
+      const modal = document.getElementById("labelModal");
+      const container = document.getElementById("labelInputs");
+      container.innerHTML = "";
+      colorLabels.forEach((label, index) => {
+        const row = document.createElement("div");
+        row.className = "label-row";
+        const dot = document.createElement("div");
+        dot.className = "dot";
+        dot.style.backgroundColor = document.getElementById("color" + index).value;
+        const input = document.createElement("input");
+        input.value = label;
+        input.oninput = () => {
+          colorLabels[index] = input.value;
+          document.getElementById("label" + index).textContent = input.value;
+          localStorage.setItem("ziary-colorLabels", JSON.stringify(colorLabels));
+        };
+        row.appendChild(dot);
+        row.appendChild(input);
+        container.appendChild(row);
+      });
+      modal.style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("labelModal").style.display = "none";
+    }
   </script>
-<script>
-let colorLabels = JSON.parse(localStorage.getItem("ziary-colorLabels") || "[]");
-if (!Array.isArray(colorLabels) || colorLabels.length !== 9) colorLabels = ["", "", "", "", "", "", "", "", ""];
-
-window.addEventListener("DOMContentLoaded", () => {
-  for (let i = 0; i < 9; i++) {
-    const label = document.getElementById("label" + i);
-    if (label) label.textContent = colorLabels[i];
-  }
-});
-
-function editLabel(index) {
-  const current = colorLabels[index] || "";
-  const newLabel = prompt("請輸入這個顏色的意義：", current);
-  if (newLabel !== null) {
-    colorLabels[index] = newLabel;
-    const label = document.getElementById("label" + index);
-    if (label) label.textContent = newLabel;
-    localStorage.setItem("ziary-colorLabels", JSON.stringify(colorLabels));
-  }
-}
-</script><script>
-let colorLabels = JSON.parse(localStorage.getItem("ziary-colorLabels") || "[]");
-if (!Array.isArray(colorLabels) || colorLabels.length !== 9) colorLabels = ["", "", "", "", "", "", "", "", ""];
-
-window.addEventListener("DOMContentLoaded", () => {
-  for (let i = 0; i < 9; i++) {
-    const label = document.getElementById("label" + i);
-    if (label) label.textContent = colorLabels[i];
-  }
-
-
-});
-
-
-
-function openModal() {
-  const modal = document.getElementById("labelModal");
-  const container = document.getElementById("labelInputs");
-  container.innerHTML = "";
-  colorLabels.forEach((label, index) => {
-    const row = document.createElement("div");
-    row.className = "label-row";
-    const dot = document.createElement("div");
-    dot.className = "dot";
-    dot.style.backgroundColor = document.querySelectorAll(".dot")[index].style.backgroundColor;
-    const input = document.createElement("input");
-    input.value = label;
-    input.oninput = () => {
-      colorLabels[index] = input.value;
-      document.getElementById("label" + index).textContent = input.value;
-      localStorage.setItem("ziary-colorLabels", JSON.stringify(colorLabels));
-    };
-    row.appendChild(dot);
-    row.appendChild(input);
-    container.appendChild(row);
-  });
-  modal.style.display = "block";
-}
-
-function closeModal() {
-  document.getElementById("labelModal").style.display = "none";
-}
-</script><button class="edit-button" onclick="openModal()">✏️</button>
-<div id="labelModal">
-<h2>編輯顏色標籤</h2>
-<div id="labelInputs"></div>
-<button id="closeModal" onclick="closeModal()">關閉</button>
-</div>
 </body>
 </html>
