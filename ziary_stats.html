@@ -39,19 +39,23 @@
 <canvas id="pieChart"></canvas>
 <canvas id="barChart"></canvas>
 <script>
-    const colorLabels = {
-      red: "紅", orange: "橘", yellow: "黃",
-      brown: "棕", green: "綠", blue: "藍",
-      teal: "藍綠", gray: "灰", black: "黑"
-    };
+const defaultLabels = ["紅", "橘", "黃", "棕", "綠", "藍", "藍綠", "灰", "黑"];
+const colorKeys = ["red", "orange", "yellow", "brown", "green", "blue", "teal", "gray", "black"];
 
-    const defaultColors = [
+// 讀取自訂標籤（若無則用預設）
+const userLabels = JSON.parse(localStorage.getItem("ziary-colorLabels") || "[]");
+const colorLabels = {};
+colorKeys.forEach((key, index) => {
+  colorLabels[key] = (userLabels[index] || "").trim() || defaultLabels[index];
+});
+
+// 讀取自訂顏色（若無則用預設）
+const defaultColors = [
   "#CC5F5A", "#ff9933", "#FFD700",
   "#B5866C", "#BED06F", "#769EDB",
   "#30BEBF", "#d3d3d3", "#000000"
 ];
 const userColors = JSON.parse(localStorage.getItem("ziary-colorMap")) || defaultColors;
-const colorKeys = ["red", "orange", "yellow", "brown", "green", "blue", "teal", "gray", "black"];
 const colorHex = {};
 colorKeys.forEach((key, index) => {
   colorHex[key] = userColors[index];
@@ -109,11 +113,19 @@ colorKeys.forEach((key, index) => {
             text: "各心情顏色出現次數"
           }
         },
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
+scales: {
+  y: {
+    beginAtZero: true
+  },
+  x: {
+    ticks: {
+      callback: function(value) {
+        // 將中文一個字一行顯示
+        return this.getLabelForValue(value).split("").join("\n");
+      }
+    }
+  }
+}
       }
     });
   </script>
