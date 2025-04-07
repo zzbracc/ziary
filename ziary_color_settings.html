@@ -23,7 +23,8 @@
     }
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, auto);
+      justify-content: center;
       gap: 12px;
       padding: 0 12px;
       max-width: 600px;
@@ -56,6 +57,9 @@
   
 .circle-wrapper {
   width: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 64px;
   border-radius: 50%;
   overflow: hidden;
