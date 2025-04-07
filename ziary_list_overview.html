@@ -51,15 +51,7 @@
       border: 1px solid #ccc;
     }
 
-    .red { background-color: #CC5F5A; border-color: #CC5F5A; }
-    .orange { background-color: #ff9933; border-color: #ff9933; }
-    .yellow { background-color: #FFD700; border-color: #FFD700; }
-    .brown { background-color: #B5866C; border-color: #B5866C; }
-    .green { background-color: #BED06F; border-color: #BED06F; }
-    .blue { background-color: #769EDB; border-color: #769EDB; }
-    .teal { background-color: #30BEBF; border-color: #30BEBF; }
-    .gray { background-color: #d3d3d3; border-color: #d3d3d3; }
-    .black { background-color: #000000; border-color: #000000; }
+    
 
     .note {
       font-size: 14px;
@@ -70,6 +62,27 @@
 </head>
 <body>
 <h1>📋 心情列表（日記）</h1>
+<script>
+// 根據 localStorage 中的配色，自動設定 .red ~ .black 的顏色
+const defaultColors = [
+  "#CC5F5A", "#ff9933", "#FFD700",
+  "#B5866C", "#BED06F", "#769EDB",
+  "#30BEBF", "#d3d3d3", "#000000"
+];
+const userColors = JSON.parse(localStorage.getItem("ziary-colorMap")) || defaultColors;
+const colorKeys = ["red", "orange", "yellow", "brown", "green", "blue", "teal", "gray", "black"];
+
+colorKeys.forEach((color, index) => {
+  const style = document.createElement("style");
+  style.innerHTML = `
+    .${color} {
+      background-color: ${userColors[index]};
+      border-color: ${userColors[index]};
+    }
+  `;
+  document.head.appendChild(style);
+});
+</script>
 <div id="colorFilter" style="margin: 10px auto 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;">
 <div class="dot red" data-color="red" style="cursor:pointer;" title="red"></div>
 <div class="dot orange" data-color="orange" style="cursor:pointer;" title="orange"></div>
