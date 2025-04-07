@@ -79,20 +79,6 @@
   cursor: pointer;
 }
 
-.label {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 12px;
-  color: white;
-  text-shadow: 0 0 3px #000;
-  pointer-events: none;
-  font-family: 'Zen Maru Gothic', sans-serif;
-}
-.circle-wrapper {
-  position: relative;
-}
 
 
 .label {
@@ -254,35 +240,9 @@ window.addEventListener("DOMContentLoaded", () => {
     if (label) label.textContent = colorLabels[i];
   }
 
-  document.querySelectorAll(".circle-wrapper").forEach(wrapper => {
-    let pressTimer;
-    const index = parseInt(wrapper.getAttribute("data-index"));
 
-    const start = () => {
-      pressTimer = setTimeout(() => {
-        console.log("長按觸發 editLabel", index); editLabel(index);
-      }, 600);
-    };
-    const cancel = () => clearTimeout(pressTimer);
-
-    wrapper.addEventListener("touchstart", start);
-    wrapper.addEventListener("mousedown", start);
-    wrapper.addEventListener("touchend", cancel);
-    wrapper.addEventListener("mouseup", cancel);
-    wrapper.addEventListener("mouseleave", cancel);
-  });
 });
 
-function editLabel(index) {
-  const current = colorLabels[index] || "";
-  const newLabel = prompt("請輸入這個顏色的意義：", current);
-  if (newLabel !== null) {
-    colorLabels[index] = newLabel;
-    const label = document.getElementById("label" + index);
-    if (label) label.textContent = newLabel;
-    localStorage.setItem("ziary-colorLabels", JSON.stringify(colorLabels));
-  }
-}
 
 
 function openModal() {
