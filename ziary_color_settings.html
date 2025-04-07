@@ -110,7 +110,7 @@
   max-width: 80%;
   text-align: center;
   white-space: nowrap;
-  box-shadow: 0 0 2px rgba(0,0,0,0.2);
+  
 }
 
 .circle-wrapper {
@@ -121,6 +121,60 @@
 .dot {
   aspect-ratio: 1 / 1;
   display: inline-block;
+}
+
+.edit-button {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  font-size: 24px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background-color: #30BEBF;
+  color: white;
+  border: none;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+#labelModal {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  display: none;
+  z-index: 1001;
+  max-width: 90%;
+}
+#labelModal h2 {
+  font-size: 20px;
+  font-family: 'Nanum Pen Script', cursive;
+}
+.label-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.label-row .dot {
+  width: 20px;
+  height: 20px;
+}
+#labelModal input {
+  flex: 1;
+  padding: 4px 8px;
+  font-size: 14px;
+}
+#closeModal {
+  margin-top: 10px;
+  background: #ccc;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
 }
 </style>
 </head>
@@ -229,5 +283,40 @@ function editLabel(index) {
     localStorage.setItem("ziary-colorLabels", JSON.stringify(colorLabels));
   }
 }
-</script></body>
+
+
+function openModal() {
+  const modal = document.getElementById("labelModal");
+  const container = document.getElementById("labelInputs");
+  container.innerHTML = "";
+  colorLabels.forEach((label, index) => {
+    const row = document.createElement("div");
+    row.className = "label-row";
+    const dot = document.createElement("div");
+    dot.className = "dot";
+    dot.style.backgroundColor = document.querySelectorAll(".dot")[index].style.backgroundColor;
+    const input = document.createElement("input");
+    input.value = label;
+    input.oninput = () => {
+      colorLabels[index] = input.value;
+      document.getElementById("label" + index).textContent = input.value;
+      localStorage.setItem("ziary-colorLabels", JSON.stringify(colorLabels));
+    };
+    row.appendChild(dot);
+    row.appendChild(input);
+    container.appendChild(row);
+  });
+  modal.style.display = "block";
+}
+
+function closeModal() {
+  document.getElementById("labelModal").style.display = "none";
+}
+</script><button class="edit-button" onclick="openModal()">✏️</button>
+<div id="labelModal">
+<h2>編輯顏色標籤</h2>
+<div id="labelInputs"></div>
+<button id="closeModal" onclick="closeModal()">關閉</button>
+</div>
+</body>
 </html>
