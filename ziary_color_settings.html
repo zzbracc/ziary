@@ -78,21 +78,36 @@
   background: none;
   cursor: pointer;
 }
+
+.label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  color: white;
+  text-shadow: 0 0 3px #000;
+  pointer-events: none;
+  font-family: 'Zen Maru Gothic', sans-serif;
+}
+.circle-wrapper {
+  position: relative;
+}
 </style>
 </head>
 <body>
 <h1>🎨 自訂配色</h1>
 <div class="grid" id="circleGrid">
 <!-- 9 顆圓圈 input -->
-<div class="circle-wrapper"><input id="color0" type="color"/></div>
-<div class="circle-wrapper"><input id="color1" type="color"/></div>
-<div class="circle-wrapper"><input id="color2" type="color"/></div>
-<div class="circle-wrapper"><input id="color3" type="color"/></div>
-<div class="circle-wrapper"><input id="color4" type="color"/></div>
-<div class="circle-wrapper"><input id="color5" type="color"/></div>
-<div class="circle-wrapper"><input id="color6" type="color"/></div>
-<div class="circle-wrapper"><input id="color7" type="color"/></div>
-<div class="circle-wrapper"><input id="color8" type="color"/></div>
+<div class="circle-wrapper" ondblclick="editLabel(0)"><input id="color0" type="color"/><span class="label" id="label0"></span></div>
+<div class="circle-wrapper" ondblclick="editLabel(1)"><input id="color1" type="color"/><span class="label" id="label1"></span></div>
+<div class="circle-wrapper" ondblclick="editLabel(2)"><input id="color2" type="color"/><span class="label" id="label2"></span></div>
+<div class="circle-wrapper" ondblclick="editLabel(3)"><input id="color3" type="color"/><span class="label" id="label3"></span></div>
+<div class="circle-wrapper" ondblclick="editLabel(4)"><input id="color4" type="color"/><span class="label" id="label4"></span></div>
+<div class="circle-wrapper" ondblclick="editLabel(5)"><input id="color5" type="color"/><span class="label" id="label5"></span></div>
+<div class="circle-wrapper" ondblclick="editLabel(6)"><input id="color6" type="color"/><span class="label" id="label6"></span></div>
+<div class="circle-wrapper" ondblclick="editLabel(7)"><input id="color7" type="color"/><span class="label" id="label7"></span></div>
+<div class="circle-wrapper" ondblclick="editLabel(8)"><input id="color8" type="color"/><span class="label" id="label8"></span></div>
 </div>
 <div class="buttons">
 <button onclick="saveColors()">儲存</button>
@@ -125,5 +140,23 @@
       localStorage.setItem("ziary-colorMap", JSON.stringify(colorMap));
     }
   </script>
-</body>
+<script>
+let colorLabels = JSON.parse(localStorage.getItem("ziary-colorLabels") || "[]");
+if (!Array.isArray(colorLabels) || colorLabels.length !== 9) colorLabels = ["", "", "", "", "", "", "", "", ""];
+
+for (let i = 0; i < 9; i++) {
+  const label = document.getElementById("label" + i);
+  label.textContent = colorLabels[i];
+}
+
+function editLabel(index) {
+  const current = colorLabels[index] || "";
+  const newLabel = prompt("請輸入這個顏色的意義：", current);
+  if (newLabel !== null) {
+    colorLabels[index] = newLabel;
+    document.getElementById("label" + index).textContent = newLabel;
+    localStorage.setItem("ziary-colorLabels", JSON.stringify(colorLabels));
+  }
+}
+</script></body>
 </html>
