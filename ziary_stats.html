@@ -117,14 +117,21 @@ scales: {
   y: {
     beginAtZero: true
   },
-  x: {
-    ticks: {
-      callback: function(value) {
-        // 將中文一個字一行顯示
-        return this.getLabelForValue(value).split("").join("\n");
-      }
-    }
+x: {
+  ticks: {
+    callback: function(value) {
+      const label = this.getLabelForValue(value);
+      return label.split(''); // 把文字拆開成直的（陣列會自動每行顯示一個字）
+    },
+    font: {
+      lineHeight: 1.2 // 可調整字距
+    },
+    display: true,
+    maxRotation: 0,
+    minRotation: 0
   }
+}
+
 }
       }
     });
