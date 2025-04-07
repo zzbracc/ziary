@@ -45,11 +45,17 @@
       teal: "藍綠", gray: "灰", black: "黑"
     };
 
-    const colorHex = {
-      red: "#CC5F5A", orange: "#ff9933", yellow: "#FFD700",
-      brown: "#B5866C", green: "#BED06F", blue: "#769EDB",
-      teal: "#30BEBF", gray: "#d3d3d3", black: "#000000"
-    };
+    const defaultColors = [
+  "#CC5F5A", "#ff9933", "#FFD700",
+  "#B5866C", "#BED06F", "#769EDB",
+  "#30BEBF", "#d3d3d3", "#000000"
+];
+const userColors = JSON.parse(localStorage.getItem("ziary-colorMap")) || defaultColors;
+const colorKeys = ["red", "orange", "yellow", "brown", "green", "blue", "teal", "gray", "black"];
+const colorHex = {};
+colorKeys.forEach((key, index) => {
+  colorHex[key] = userColors[index];
+});
 
     const counts = {};
     Object.keys(colorLabels).forEach(c => counts[c] = 0);
