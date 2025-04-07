@@ -45,7 +45,7 @@
       teal: "藍綠", gray: "灰", black: "黑"
     };
 
-    const colorMap = JSON.parse(localStorage.getItem('ziary-colorMap')) || {
+    const colorHex = {
       red: "#CC5F5A", orange: "#ff9933", yellow: "#FFD700",
       brown: "#B5866C", green: "#BED06F", blue: "#769EDB",
       teal: "#30BEBF", gray: "#d3d3d3", black: "#000000"
@@ -64,7 +64,7 @@
 
     const labels = Object.keys(counts);
     const data = labels.map(c => counts[c]);
-    const backgroundColors = labels.map(c => colorMap[c]);
+    const backgroundColors = labels.map(c => colorHex[c]);
     const displayLabels = labels.map(c => colorLabels[c]);
 
     const pieChart = new Chart(document.getElementById("pieChart"), {
