@@ -30,12 +30,6 @@
       margin: 0 auto 24px;
     }
     input[type='color'] {
-  width: 64px;
-  height: 64px;
-  min-width: 48px;
-  max-width: 80px;
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
   background-color: currentColor;
   border-radius: 50%;
   border: 2px solid #ccc;
@@ -59,21 +53,42 @@
   margin: 0 12px;
   font-family: 'Zen Maru Gothic', sans-serif;
 }
-  </style>
+  
+.circle-wrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 6px;
+}
+.circle-wrapper input[type='color'] {
+  width: 100%;
+  height: 100%;
+  border: none;
+  padding: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  cursor: pointer;
+}
+</style>
 </head>
 <body>
 <h1>🎨 自訂配色</h1>
 <div class="grid" id="circleGrid">
 <!-- 9 顆圓圈 input -->
-<input id="color0" type="color"/>
-<input id="color1" type="color"/>
-<input id="color2" type="color"/>
-<input id="color3" type="color"/>
-<input id="color4" type="color"/>
-<input id="color5" type="color"/>
-<input id="color6" type="color"/>
-<input id="color7" type="color"/>
-<input id="color8" type="color"/>
+<div class="circle-wrapper"><input id="color0" type="color"/></div>
+<div class="circle-wrapper"><input id="color1" type="color"/></div>
+<div class="circle-wrapper"><input id="color2" type="color"/></div>
+<div class="circle-wrapper"><input id="color3" type="color"/></div>
+<div class="circle-wrapper"><input id="color4" type="color"/></div>
+<div class="circle-wrapper"><input id="color5" type="color"/></div>
+<div class="circle-wrapper"><input id="color6" type="color"/></div>
+<div class="circle-wrapper"><input id="color7" type="color"/></div>
+<div class="circle-wrapper"><input id="color8" type="color"/></div>
 </div>
 <div class="buttons">
 <button onclick="saveColors()">儲存</button>
