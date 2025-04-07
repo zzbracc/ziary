@@ -114,6 +114,13 @@
 </script>
 <div id="entries"></div>
 <script>
+const colorMap = JSON.parse(localStorage.getItem('ziary-colorMap')) || {
+  red: "#CC5F5A", orange: "#ff9933", yellow: "#FFD700",
+  brown: "#B5866C", green: "#BED06F", blue: "#769EDB",
+  teal: "#30BEBF", gray: "#d3d3d3", black: "#000000"
+};
+
+
     const colors = ["red", "orange", "yellow", "brown", "green", "blue", "teal", "gray", "black"];
     const container = document.getElementById("entries");
 
@@ -138,6 +145,8 @@
       colors.forEach(c => {
         const dot = document.createElement("div");
         dot.className = "dot";
+dot.style.backgroundColor = colorMap[c];
+dot.style.borderColor = colorMap[c];
         if (entry.colors && entry.colors.includes(c)) {
           dot.classList.add(c);
         }
@@ -153,7 +162,6 @@
       container.appendChild(div);
     });
   </script>
-
 <script>
   let selectedColors = new Set();
 
@@ -213,6 +221,5 @@
     });
   }
 </script>
-
 </body>
 </html>

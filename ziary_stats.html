@@ -1,13 +1,14 @@
 
 <!DOCTYPE html>
+
 <html lang="zh-TW">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="UTF-8" />
-  <title>心情統計圖表</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Zen+Maru+Gothic&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8">
+<title>心情統計圖表</title>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&amp;family=Zen+Maru+Gothic&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
     body {
       font-family: 'Zen Maru Gothic', sans-serif;
       background-color: #fffaf5;
@@ -26,29 +27,25 @@
       margin: 20px auto;
     }
   </style>
-</head>
+</meta></head>
 <body>
 <h2 style="text-align: center; margin-top: 1rem;">📊 心情統計圖表</h2>
-
 <div style="margin-bottom: 1rem; display: flex; justify-content: center; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-  <input type="month" id="startMonth">
-  <span>至</span>
-  <input type="month" id="endMonth">
-  <button onclick="updateStats()">重新統計</button>
+<input id="startMonth" type="month"/>
+<span>至</span>
+<input id="endMonth" type="month"/>
+<button onclick="updateStats()">重新統計</button>
 </div>
-
-  
-  <canvas id="pieChart"></canvas>
-  <canvas id="barChart"></canvas>
-
-  <script>
+<canvas id="pieChart"></canvas>
+<canvas id="barChart"></canvas>
+<script>
     const colorLabels = {
       red: "紅", orange: "橘", yellow: "黃",
       brown: "棕", green: "綠", blue: "藍",
       teal: "藍綠", gray: "灰", black: "黑"
     };
 
-    const colorHex = {
+    const colorMap = JSON.parse(localStorage.getItem('ziary-colorMap')) || {
       red: "#CC5F5A", orange: "#ff9933", yellow: "#FFD700",
       brown: "#B5866C", green: "#BED06F", blue: "#769EDB",
       teal: "#30BEBF", gray: "#d3d3d3", black: "#000000"
@@ -67,7 +64,7 @@
 
     const labels = Object.keys(counts);
     const data = labels.map(c => counts[c]);
-    const backgroundColors = labels.map(c => colorHex[c]);
+    const backgroundColors = labels.map(c => colorMap[c]);
     const displayLabels = labels.map(c => colorLabels[c]);
 
     const pieChart = new Chart(document.getElementById("pieChart"), {
@@ -114,7 +111,6 @@
       }
     });
   </script>
-
 <script>
 function updateStats() {
   const startMonth = document.getElementById("startMonth").value;
@@ -156,6 +152,5 @@ function updateStats() {
   barChart.update();
 }
 </script>
-
 </body>
 </html>
