@@ -121,15 +121,15 @@
 <body>
   <h1>🎨 自訂配色</h1>
   <div class="grid" id="circleGrid">
-<div class="circle-wrapper" data-index="0"><input id="color0" type="color"/><span class="label" id="label0"></span></div>
-<div class="circle-wrapper" data-index="1"><input id="color1" type="color"/><span class="label" id="label1"></span></div>
-<div class="circle-wrapper" data-index="2"><input id="color2" type="color"/><span class="label" id="label2"></span></div>
-<div class="circle-wrapper" data-index="3"><input id="color3" type="color"/><span class="label" id="label3"></span></div>
-<div class="circle-wrapper" data-index="4"><input id="color4" type="color"/><span class="label" id="label4"></span></div>
-<div class="circle-wrapper" data-index="5"><input id="color5" type="color"/><span class="label" id="label5"></span></div>
-<div class="circle-wrapper" data-index="6"><input id="color6" type="color"/><span class="label" id="label6"></span></div>
-<div class="circle-wrapper" data-index="7"><input id="color7" type="color"/><span class="label" id="label7"></span></div>
-<div class="circle-wrapper" data-index="8"><input id="color8" type="color"/><span class="label" id="label8"></span></div>
+<div class='circle-wrapper' data-index='0'><input id='color0' type='color'/><span class='label' id='label0'></span></div>
+<div class='circle-wrapper' data-index='1'><input id='color1' type='color'/><span class='label' id='label1'></span></div>
+<div class='circle-wrapper' data-index='2'><input id='color2' type='color'/><span class='label' id='label2'></span></div>
+<div class='circle-wrapper' data-index='3'><input id='color3' type='color'/><span class='label' id='label3'></span></div>
+<div class='circle-wrapper' data-index='4'><input id='color4' type='color'/><span class='label' id='label4'></span></div>
+<div class='circle-wrapper' data-index='5'><input id='color5' type='color'/><span class='label' id='label5'></span></div>
+<div class='circle-wrapper' data-index='6'><input id='color6' type='color'/><span class='label' id='label6'></span></div>
+<div class='circle-wrapper' data-index='7'><input id='color7' type='color'/><span class='label' id='label7'></span></div>
+<div class='circle-wrapper' data-index='8'><input id='color8' type='color'/><span class='label' id='label8'></span></div>
   </div>
   <div class="buttons">
     <button onclick="saveColors()">儲存</button>
@@ -170,10 +170,16 @@
 
     let colorLabels = JSON.parse(localStorage.getItem("ziary-colorLabels") || "[]");
     if (!Array.isArray(colorLabels) || colorLabels.length !== 9) colorLabels = ["", "", "", "", "", "", "", "", ""];
+
     window.addEventListener("DOMContentLoaded", () => {
       for (let i = 0; i < 9; i++) {
         const label = document.getElementById("label" + i);
-        if (label) label.textContent = colorLabels[i];
+        if (colorLabels[i].trim()) {
+          label.textContent = colorLabels[i];
+          label.style.display = "inline";
+        } else {
+          label.style.display = "none";
+        }
       }
     });
 
@@ -191,7 +197,13 @@
         input.value = label;
         input.oninput = () => {
           colorLabels[index] = input.value;
-          document.getElementById("label" + index).textContent = input.value;
+          const labelSpan = document.getElementById("label" + index);
+          if (input.value.trim()) {
+            labelSpan.textContent = input.value;
+            labelSpan.style.display = "inline";
+          } else {
+            labelSpan.style.display = "none";
+          }
           localStorage.setItem("ziary-colorLabels", JSON.stringify(colorLabels));
         };
         row.appendChild(dot);
