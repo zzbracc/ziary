@@ -37,7 +37,7 @@
 <button onclick="updateStats()">重新統計</button>
 </div>
 <canvas id="pieChart"></canvas>
-<canvas id="barChart"></canvas>
+<canvas id="barChart" height="500"></canvas>
 <script>
 const defaultLabels = ["紅", "橘", "黃", "棕", "綠", "藍", "藍綠", "灰", "黑"];
 const colorKeys = ["red", "orange", "yellow", "brown", "green", "blue", "teal", "gray", "black"];
@@ -116,21 +116,27 @@ indexAxis: 'y',
         },
 scales: {
   y: {
-    beginAtZero: true
+    beginAtZero: true,
+    ticks: {
+      font: {
+        size: 14 // 調整字體大小
+      },
+      padding: 8 // 增加行距
+    }
   },
-x: {
-  ticks: {
-    callback: function(value) {
-      const label = this.getLabelForValue(value);
-      return label.split(''); // 把文字拆開成直的（陣列會自動每行顯示一個字）
-    },
-    font: {
-      lineHeight: 1.2 // 可調整字距
-    },
-    display: true,
-    maxRotation: 0,
-    minRotation: 0
-  }
+
+    x: {
+      ticks: {
+        callback: function(value) {
+          const label = this.getLabelForValue(value);
+          return label.split('');
+        },
+        font: {
+          lineHeight: 1.2
+        },
+        display: true,
+        maxRotation: 0,
+        minRotation: 0  }
 }
 
 }
