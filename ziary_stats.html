@@ -125,22 +125,19 @@ scales: {
     }
   },
 
-    x: {
-      ticks: {
-        callback: function(value) {
-          const label = this.getLabelForValue(value);
-          return label.split('');
-        },
-        font: {
-          lineHeight: 1.2
-        },
-        display: true,
-        maxRotation: 0,
-        minRotation: 0  }
-}
-
-}
-      }
+  x: {
+    ticks: {
+      font: {
+        lineHeight: 1.2
+      },
+      display: true,
+      maxRotation: 0,
+      minRotation: 0
+  }
+  }
+  
+  }   
+   }
     });
   </script>
 <script>
