@@ -50,9 +50,8 @@ window.onload = () => {
 
 </script>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta charset="utf-8">
+<meta charset="utf-8"/>
 <title>今天的紀錄</title>
-
 <style>
 @font-face {
   font-family: 'JF Open 粉圓體';
@@ -156,7 +155,40 @@ body, h1, h2, h3, .note, input, textarea, button { font-family: 'JF Open 粉圓�
     button:hover {
       background-color: #5f86c7;
     }
-  </style>
+  
+
+/* 統一 Ziary 按鈕樣式 */
+.ziary-button {
+  padding: 10px 20px;
+  font-size: 18px;
+  font-family: 'JF Open 粉圓體', 'Zen Maru Gothic', sans-serif;
+  background-color: #30BEBF;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+.ziary-button:hover {
+  background-color: #2aa5a7;
+  transform: scale(1.03);
+}
+.ziary-button:active {
+  background-color: #239294;
+  transform: scale(0.97);
+}
+
+
+label {
+  font-size: 18px;
+  margin-bottom: 6px;
+  display: block;
+  text-align: left;
+  width: 100%;
+  max-width: 400px;
+}
+</style>
 <script>
 const userColorMap = JSON.parse(localStorage.getItem("ziary-colorMap") || "[]");
 const fallbackColorMap = ['#CC5F5A', '#ff9933', '#FFD700', '#B5866C', '#BED06F', '#769EDB', '#30BEBF', '#d3d3d3', '#000000'];
@@ -197,7 +229,7 @@ window.onload = () => {
 };
 
 </script>
-</meta></head>
+</head>
 <body>
 <h1>今天的紀錄</h1>
 <div class="link"><a href="ziary_calendar.html">🟦 查看心情總覽（月曆）</a></div>
@@ -220,7 +252,7 @@ window.onload = () => {
 <label for="note">心情筆記：</label>
 <textarea id="note" placeholder="今天過得怎麼樣呢？"></textarea>
 </div>
-<button onclick="saveEntry()">儲存</button>
+<button class="ziary-button" onclick="saveEntry()">儲存</button>
 <script>
     const dateInput = document.getElementById('date');
     const noteInput = document.getElementById('note');
