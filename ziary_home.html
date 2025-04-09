@@ -1,15 +1,26 @@
 
 <!DOCTYPE html>
+
 <html lang="zh-TW">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="UTF-8" />
-  <title>Ziary 首頁</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Zen+Maru+Gothic&display=swap" rel="stylesheet">
-  <style>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8">
+<title>Ziary 首頁</title>
+
+<style>
 @font-face {
   font-family: 'JF Open 粉圓體';
-  src: url('https://cdn.jsdelivr.net/gh/justfont/open-huninn-font@latest/fonts/zh-hant/Huninn-Regular.woff2') format('woff2');
+  src: url('./fonts/huninn.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+body, h1, h2, h3, .note, input, textarea, button, select, label, canvas, p {
+  font-family: 'JF Open 粉圓體', 'Zen Maru Gothic', sans-serif !important;
+}
+
+
+@font-face {
+  font-family: 'JF Open 粉圓體';
   font-weight: normal;
   font-style: normal;
 }
@@ -95,23 +106,21 @@ body, p, .btn { font-family: 'JF Open 粉圓體', 'Zen Maru Gothic', sans-serif;
       right: 20px;
     }
   </style>
-</head>
+</meta></head>
 <body>
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Star_symbol.svg/120px-Star_symbol.svg.png" class="icon top-left" />
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Love_Heart_SVG.svg/120px-Love_Heart_SVG.svg.png" class="icon top-right" />
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Star_icon_stylized.svg/120px-Star_icon_stylized.svg.png" class="icon bottom-left" />
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Heart_icon_red_hollow.svg/120px-Heart_icon_red_hollow.svg.png" class="icon bottom-right" />
-
-  <h1>Ziary</h1>
-  <p>我的心情紀錄花園 🌱</p>
-
-  <div class="button-grid">
-    <a class="btn" href="index.html">📅 開始今天的紀錄</a>
-    <a class="btn" href="ziary_calendar.html">🟦 心情總覽（月曆）</a>
-    <a class="btn" href="ziary_list_overview.html">📋 心情列表（日記）</a>
-    <a class="btn" href="ziary_export.html">📤 匯出資料（CSV）</a>
-    <a class="btn" href="ziary_stats.html">📊 心情統計圖表</a>
-      <a class="btn" href="ziary_color_settings.html">🎨 自訂配色</a>
+<img class="icon top-left" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Star_symbol.svg/120px-Star_symbol.svg.png"/>
+<img class="icon top-right" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Love_Heart_SVG.svg/120px-Love_Heart_SVG.svg.png"/>
+<img class="icon bottom-left" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Star_icon_stylized.svg/120px-Star_icon_stylized.svg.png"/>
+<img class="icon bottom-right" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Heart_icon_red_hollow.svg/120px-Heart_icon_red_hollow.svg.png"/>
+<h1>Ziary</h1>
+<p>我的心情紀錄花園 🌱</p>
+<div class="button-grid">
+<a class="btn" href="index.html">📅 開始今天的紀錄</a>
+<a class="btn" href="ziary_calendar.html">🟦 心情總覽（月曆）</a>
+<a class="btn" href="ziary_list_overview.html">📋 心情列表（日記）</a>
+<a class="btn" href="ziary_export.html">📤 匯出資料（CSV）</a>
+<a class="btn" href="ziary_stats.html">📊 心情統計圖表</a>
+<a class="btn" href="ziary_color_settings.html">🎨 自訂配色</a>
 </div>
 </body>
 </html>

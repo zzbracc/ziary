@@ -1,15 +1,26 @@
 
 <!DOCTYPE html>
+
 <html lang="zh-TW">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="UTF-8" />
-  <title>匯出心情紀錄</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Zen+Maru+Gothic&display=swap" rel="stylesheet">
-  <style>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8">
+<title>匯出心情紀錄</title>
+
+<style>
 @font-face {
   font-family: 'JF Open 粉圓體';
-  src: url('https://cdn.jsdelivr.net/gh/justfont/open-huninn-font@latest/fonts/zh-hant/Huninn-Regular.woff2') format('woff2');
+  src: url('./fonts/huninn.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+body, h1, h2, h3, .note, input, textarea, button, select, label, canvas, p {
+  font-family: 'JF Open 粉圓體', 'Zen Maru Gothic', sans-serif !important;
+}
+
+
+@font-face {
+  font-family: 'JF Open 粉圓體';
   font-weight: normal;
   font-style: normal;
 }
@@ -56,13 +67,12 @@ body, h1, h2, h3, .note, input, textarea, button { font-family: 'JF Open 粉圓�
 }
 
 </style>
-</head>
+</meta></head>
 <body>
-  <h1>📤 匯出心情紀錄 (CSV)</h1>
-  <p>點擊下方按鈕即可下載所有紀錄（支援中文顯示）</p>
-  <button onclick="exportCSV()">下載 CSV</button>
-
-  <script>
+<h1>📤 匯出心情紀錄 (CSV)</h1>
+<p>點擊下方按鈕即可下載所有紀錄（支援中文顯示）</p>
+<button onclick="exportCSV()">下載 CSV</button>
+<script>
     function exportCSV() {
       const keys = Object.keys(localStorage).filter(k => k.startsWith("ziary-")).sort();
       const rows = [["日期", "顏色們", "心情筆記"]];
@@ -116,14 +126,12 @@ function importCSV() {
 }
 
 </script>
-
-<hr style="margin: 40px 0;">
+<hr style="margin: 40px 0;"/>
 <h1>📥 匯入心情紀錄</h1>
 <p>請選擇先前匯出的 CSV 檔案（ziary_records.csv）：</p>
-<label for="importFile" class="custom-upload">📁 選擇 CSV 檔案</label>
-<input type="file" id="importFile" accept=".csv" style="display:none;" />
+<label class="custom-upload" for="importFile">📁 選擇 CSV 檔案</label>
+<input accept=".csv" id="importFile" style="display:none;" type="file"/>
 <button onclick="importCSV()">匯入資料</button>
 <p id="importStatus" style="margin-top: 10px; color: green;"></p>
-
 </body>
 </html>

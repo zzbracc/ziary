@@ -1,15 +1,26 @@
 
 <!DOCTYPE html>
+
 <html lang="zh-TW">
 <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Ziary 自訂配色</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Zen+Maru+Gothic&display=swap" rel="stylesheet"/>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ziary 自訂配色</title>
+
+<style>
 @font-face {
   font-family: 'JF Open 粉圓體';
-  src: url('https://cdn.jsdelivr.net/gh/justfont/open-huninn-font@latest/fonts/zh-hant/Huninn-Regular.woff2') format('woff2');
+  src: url('./fonts/huninn.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+body, h1, h2, h3, .note, input, textarea, button, select, label, canvas, p {
+  font-family: 'JF Open 粉圓體', 'Zen Maru Gothic', sans-serif !important;
+}
+
+
+@font-face {
+  font-family: 'JF Open 粉圓體';
   font-weight: normal;
   font-style: normal;
 }
@@ -128,29 +139,29 @@ body, h1, h2, h3, .note, input, textarea, button { font-family: 'JF Open 粉圓�
   </style>
 </head>
 <body>
-  <h1>🎨 自訂配色</h1>
-  <div class="grid" id="circleGrid">
-<div class='circle-wrapper' data-index='0'><input id='color0' type='color'/><span class='label' id='label0'></span></div>
-<div class='circle-wrapper' data-index='1'><input id='color1' type='color'/><span class='label' id='label1'></span></div>
-<div class='circle-wrapper' data-index='2'><input id='color2' type='color'/><span class='label' id='label2'></span></div>
-<div class='circle-wrapper' data-index='3'><input id='color3' type='color'/><span class='label' id='label3'></span></div>
-<div class='circle-wrapper' data-index='4'><input id='color4' type='color'/><span class='label' id='label4'></span></div>
-<div class='circle-wrapper' data-index='5'><input id='color5' type='color'/><span class='label' id='label5'></span></div>
-<div class='circle-wrapper' data-index='6'><input id='color6' type='color'/><span class='label' id='label6'></span></div>
-<div class='circle-wrapper' data-index='7'><input id='color7' type='color'/><span class='label' id='label7'></span></div>
-<div class='circle-wrapper' data-index='8'><input id='color8' type='color'/><span class='label' id='label8'></span></div>
-  </div>
-  <div class="buttons">
-    <button onclick="saveColors()">儲存</button>
-    <button onclick="resetColors()">預設</button>
-  </div>
-  <button class="edit-button" onclick="openModal()">✏️</button>
-  <div id="labelModal">
-    <h2>編輯顏色標籤</h2>
-    <div id="labelInputs"></div>
-    <button id="closeModal" onclick="closeModal()">關閉</button>
-  </div>
-  <script>
+<h1>🎨 自訂配色</h1>
+<div class="grid" id="circleGrid">
+<div class="circle-wrapper" data-index="0"><input id="color0" type="color"/><span class="label" id="label0"></span></div>
+<div class="circle-wrapper" data-index="1"><input id="color1" type="color"/><span class="label" id="label1"></span></div>
+<div class="circle-wrapper" data-index="2"><input id="color2" type="color"/><span class="label" id="label2"></span></div>
+<div class="circle-wrapper" data-index="3"><input id="color3" type="color"/><span class="label" id="label3"></span></div>
+<div class="circle-wrapper" data-index="4"><input id="color4" type="color"/><span class="label" id="label4"></span></div>
+<div class="circle-wrapper" data-index="5"><input id="color5" type="color"/><span class="label" id="label5"></span></div>
+<div class="circle-wrapper" data-index="6"><input id="color6" type="color"/><span class="label" id="label6"></span></div>
+<div class="circle-wrapper" data-index="7"><input id="color7" type="color"/><span class="label" id="label7"></span></div>
+<div class="circle-wrapper" data-index="8"><input id="color8" type="color"/><span class="label" id="label8"></span></div>
+</div>
+<div class="buttons">
+<button onclick="saveColors()">儲存</button>
+<button onclick="resetColors()">預設</button>
+</div>
+<button class="edit-button" onclick="openModal()">✏️</button>
+<div id="labelModal">
+<h2>編輯顏色標籤</h2>
+<div id="labelInputs"></div>
+<button id="closeModal" onclick="closeModal()">關閉</button>
+</div>
+<script>
     const defaultColors = ['#CC5F5A', '#ff9933', '#FFD700', '#B5866C', '#BED06F', '#769EDB', '#30BEBF', '#d3d3d3', '#000000'];
     let colorMap = JSON.parse(localStorage.getItem("ziary-colorMap") || "[]");
     if (!Array.isArray(colorMap) || colorMap.length !== 9) colorMap = [...defaultColors];
