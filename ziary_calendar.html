@@ -1,22 +1,23 @@
 
 <!DOCTYPE html>
+
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ziary - 心情月曆總覽</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="ziary-icon-192.png" type="image/png">
-  <link rel="apple-touch-icon" href="ziary-icon-192.png">
-  <meta name="theme-color" content="#30BEBF">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ziary - 心情月曆總覽</title>
+<link href="manifest.json" rel="manifest"/>
+<link href="ziary-icon-192.png" rel="icon" type="image/png"/>
+<link href="ziary-icon-192.png" rel="apple-touch-icon"/>
+<meta content="#30BEBF" name="theme-color"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js')
         .then(() => console.log("Service Worker Registered"));
     }
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Zen+Maru+Gothic&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&amp;family=Zen+Maru+Gothic&amp;display=swap" rel="stylesheet"/>
 <style>
 @font-face {
   font-family: 'JF Open 粉圓體';
@@ -145,39 +146,37 @@ body, h1, h2, h3, .note, input, textarea, button { font-family: 'JF Open 粉圓�
   align-items: center;
   justify-content: center;
 }
-</style>
 
+select {
+  font-family: 'JF Open 粉圓體', 'Zen Maru Gothic', sans-serif !important;
+}
+</style>
 <script>
 const userColorMap = JSON.parse(localStorage.getItem("ziary-colorMap") || "[]");
 const fallbackColorMap = ["#CC5F5A", "#ff9933", "#FFD700", "#B5866C", "#BED06F", "#769EDB", "#30BEBF", "#d3d3d3", "#000000"];
 const getColorHex = (i) => userColorMap[i] || fallbackColorMap[i];
 </script>
-
 </head>
 <body>
-  <h1>心情月曆總覽</h1>
-  <div class="link"><a href="ziary_home.html">🏠 回功能頁</a></div>
-
-  <div>
-    <select id="month"></select>
-    <select id="year"></select>
-  </div>
-
-  
+<h1>心情月曆總覽</h1>
+<div class="link"><a href="ziary_home.html">🏠 回功能頁</a></div>
+<div>
+<select id="month"></select>
+<select id="year"></select>
+</div>
 <div class="modal-overlay" id="modalOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;z-index:999;">
-  <div class="modal" style="background:#fff;border-radius:12px;padding:16px;width:90%;max-width:340px;text-align:center;">
-    <h2 id="modalDate" style="margin-top:0;"></h2>
-    <div class="dots" id="modalEditDots"></div>
-    <textarea id="modalNoteInput" placeholder="輸入今天的文字記錄" style="width:100%;height:60px;margin-top:10px;"></textarea><br/>
-    <button onclick="saveModal()" style="margin-top:10px;background:#30BEBF;color:white;border:none;padding:6px 12px;border-radius:6px;">儲存</button>
-    <button onclick="closeModal()" style="margin-top:10px;">取消</button>
-  </div>
+<div class="modal" style="background:#fff;border-radius:12px;padding:16px;width:90%;max-width:340px;text-align:center;">
+<h2 id="modalDate" style="margin-top:0;"></h2>
+<div class="dots" id="modalEditDots"></div>
+<textarea id="modalNoteInput" placeholder="輸入今天的文字記錄" style="width:100%;height:60px;margin-top:10px;"></textarea><br/>
+<button onclick="saveModal()" style="margin-top:10px;background:#30BEBF;color:white;border:none;padding:6px 12px;border-radius:6px;">儲存</button>
+<button onclick="closeModal()" style="margin-top:10px;">取消</button>
+</div>
 </div>
 <div class="calendar-wrapper">
-    <div id="calendar"></div>
-  </div>
-
-  <script>
+<div id="calendar"></div>
+</div>
+<script>
     const calendar = document.getElementById("calendar");
     const monthSelect = document.getElementById("month");
     const yearSelect = document.getElementById("year");
