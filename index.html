@@ -1,13 +1,14 @@
 
 <!DOCTYPE html>
+
 <html lang="zh-TW">
 <head>
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="ziary-icon-192.png" type="image/png">
-  <link rel="apple-touch-icon" href="ziary-icon-192.png">
-  <meta name="theme-color" content="#30BEBF">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <script>
+<link href="manifest.json" rel="manifest"/>
+<link href="ziary-icon-192.png" rel="icon" type="image/png"/>
+<link href="ziary-icon-192.png" rel="apple-touch-icon"/>
+<meta content="#30BEBF" name="theme-color"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js')
         .then(() => console.log("Service Worker Registered"));
@@ -48,15 +49,24 @@ window.onload = () => {
 };
 
 </script>
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="UTF-8" />
-  <title>今天的紀錄</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Zen+Maru+Gothic&display=swap" rel="stylesheet">
-  <style>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8">
+<title>今天的紀錄</title>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&amp;family=Zen+Maru+Gothic&amp;display=swap" rel="stylesheet"/>
+<style>
 @font-face {
   font-family: 'JF Open 粉圓體';
-  src: url('https://cdn.jsdelivr.net/gh/justfont/open-huninn-font@latest/fonts/zh-hant/Huninn-Regular.woff2') format('woff2');
+  src: url('./fonts/huninn.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+body, h1, h2, h3, .note, input, textarea, button, select, label, canvas, p {
+  font-family: 'JF Open 粉圓體', 'Zen Maru Gothic', sans-serif !important;
+}
+
+
+@font-face {
+  font-family: 'JF Open 粉圓體';
   font-weight: normal;
   font-style: normal;
 }
@@ -152,7 +162,6 @@ body, h1, h2, h3, .note, input, textarea, button { font-family: 'JF Open 粉圓�
       background-color: #5f86c7;
     }
   </style>
-
 <script>
 const userColorMap = JSON.parse(localStorage.getItem("ziary-colorMap") || "[]");
 const fallbackColorMap = ['#CC5F5A', '#ff9933', '#FFD700', '#B5866C', '#BED06F', '#769EDB', '#30BEBF', '#d3d3d3', '#000000'];
@@ -193,37 +202,31 @@ window.onload = () => {
 };
 
 </script>
-
-</head>
+</meta></head>
 <body>
-  <h1>今天的紀錄</h1>
-  <div class="link"><a href="ziary_calendar.html">🟦 查看心情總覽（月曆）</a></div>
-
-  <div class="input-group">
-    <label for="date">選擇日期：</label>
-    <input type="date" id="date">
-  </div>
-
-  <div class="grid">
-    <div class="circle" data-color="red"></div>
-    <div class="circle" data-color="orange"></div>
-    <div class="circle" data-color="yellow"></div>
-    <div class="circle" data-color="brown"></div>
-    <div class="circle" data-color="green"></div>
-    <div class="circle" data-color="blue"></div>
-    <div class="circle" data-color="teal"></div>
-    <div class="circle" data-color="gray"></div>
-    <div class="circle" data-color="black"></div>
-  </div>
-
-  <div class="input-group">
-    <label for="note">心情筆記：</label>
-    <textarea id="note" placeholder="今天過得怎麼樣呢？"></textarea>
-  </div>
-
-  <button onclick="saveEntry()">儲存</button>
-
-  <script>
+<h1>今天的紀錄</h1>
+<div class="link"><a href="ziary_calendar.html">🟦 查看心情總覽（月曆）</a></div>
+<div class="input-group">
+<label for="date">選擇日期：</label>
+<input id="date" type="date"/>
+</div>
+<div class="grid">
+<div class="circle" data-color="red"></div>
+<div class="circle" data-color="orange"></div>
+<div class="circle" data-color="yellow"></div>
+<div class="circle" data-color="brown"></div>
+<div class="circle" data-color="green"></div>
+<div class="circle" data-color="blue"></div>
+<div class="circle" data-color="teal"></div>
+<div class="circle" data-color="gray"></div>
+<div class="circle" data-color="black"></div>
+</div>
+<div class="input-group">
+<label for="note">心情筆記：</label>
+<textarea id="note" placeholder="今天過得怎麼樣呢？"></textarea>
+</div>
+<button onclick="saveEntry()">儲存</button>
+<script>
     const dateInput = document.getElementById('date');
     const noteInput = document.getElementById('note');
     const circles = document.querySelectorAll('.circle');
