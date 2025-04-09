@@ -82,8 +82,8 @@ label {
 <input id="endMonth" type="month"/>
 <button class="ziary-button" onclick="updateStats()">重新統計</button>
 </div>
-<canvas id="pieChart"></canvas>
-<canvas height="500" id="barChart"></canvas>
+<canvas id="pieChart" width="400" height="400"></canvas>
+<canvas id="barChart" width="800" height="600"></canvas>
 <script>
 const colorKeys = ["red", "orange", "yellow", "brown", "green", "blue", "teal", "gray", "black"];
 const userLabels = JSON.parse(localStorage.getItem("ziary-colorLabels") || "[]");
@@ -146,6 +146,7 @@ const pieChart = new Chart(document.getElementById("pieChart"), {
       }]
     },
     options: {
+      responsive: false,
       plugins: {
         title: {
           display: true,
@@ -211,7 +212,8 @@ function updateStats() {
   }
 
   const start = new Date(startMonth + "-01");
-  const end = new Date(endMonth + "-31");
+  const [endYear, endMonthNum] = endMonth.split("-").map(Number);
+  const end = new Date(endYear, endMonthNum, 0);
 
   const counts = {
     red: 0, orange: 0, yellow: 0,
