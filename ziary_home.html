@@ -4,9 +4,8 @@
 <html lang="zh-TW">
 <head>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta charset="utf-8">
+<meta charset="utf-8"/>
 <title>Ziary 首頁</title>
-
 <style>
 @font-face {
   font-family: 'JF Open 粉圓體';
@@ -105,8 +104,38 @@ body, p, .btn { font-family: 'JF Open 粉圓體', 'Zen Maru Gothic', sans-serif;
       bottom: 20px;
       right: 20px;
     }
-  </style>
-</meta></head>
+  
+
+.ziary-button {
+  padding: 10px 20px;
+  font-size: 18px;
+  font-family: 'JF Open 粉圓體', 'Zen Maru Gothic', sans-serif;
+  background-color: #30BEBF;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+.ziary-button:hover {
+  background-color: #2aa5a7;
+  transform: scale(1.03);
+}
+.ziary-button:active {
+  background-color: #239294;
+  transform: scale(0.97);
+}
+label {
+  font-size: 18px;
+  margin-bottom: 6px;
+  display: block;
+  text-align: left;
+  width: 100%;
+  max-width: 400px;
+}
+</style>
+</head>
 <body>
 <img class="icon top-left" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Star_symbol.svg/120px-Star_symbol.svg.png"/>
 <img class="icon top-right" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Love_Heart_SVG.svg/120px-Love_Heart_SVG.svg.png"/>

@@ -6,7 +6,6 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta charset="utf-8"/>
 <title>心情統計圖表</title>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 @font-face {
@@ -43,6 +42,36 @@ body, h1, h2, h3, .note, input, textarea, button { font-family: 'JF Open 粉圓�
     max-width: 400px;
     margin: 20px auto;
   }
+
+
+.ziary-button {
+  padding: 10px 20px;
+  font-size: 18px;
+  font-family: 'JF Open 粉圓體', 'Zen Maru Gothic', sans-serif;
+  background-color: #30BEBF;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+.ziary-button:hover {
+  background-color: #2aa5a7;
+  transform: scale(1.03);
+}
+.ziary-button:active {
+  background-color: #239294;
+  transform: scale(0.97);
+}
+label {
+  font-size: 18px;
+  margin-bottom: 6px;
+  display: block;
+  text-align: left;
+  width: 100%;
+  max-width: 400px;
+}
 </style>
 </head>
 <body>
@@ -51,7 +80,7 @@ body, h1, h2, h3, .note, input, textarea, button { font-family: 'JF Open 粉圓�
 <input id="startMonth" type="month"/>
 <span>至</span>
 <input id="endMonth" type="month"/>
-<button onclick="updateStats()">重新統計</button>
+<button class="ziary-button" onclick="updateStats()">重新統計</button>
 </div>
 <canvas id="pieChart"></canvas>
 <canvas height="500" id="barChart"></canvas>
