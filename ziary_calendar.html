@@ -16,14 +16,24 @@
         .then(() => console.log("Service Worker Registered"));
     }
   </script>
-  <style>
-    html, body {
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Zen+Maru+Gothic&display=swap" rel="stylesheet">
+<style>
+@font-face {
+  font-family: 'JF Open 粉圓體';
+  src: url('https://cdn.jsdelivr.net/gh/justfont/open-huninn-font@latest/fonts/zh-hant/Huninn-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body, h1, h2, h3, .note, input, textarea, button { font-family: 'JF Open 粉圓體', 'Zen Maru Gothic', sans-serif; }
+
+    html, body, .weekday { font-family: 'JF Open 粉圓體', 'Zen Maru Gothic', sans-serif !important; 
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
       margin: 0;
       padding: 0;
       overflow-x: hidden;
-      font-family: "Helvetica Neue", sans-serif;
+      font-family: 'JF Open 粉圓體', 'Zen Maru Gothic', sans-serif;
       background-color: #fffaf5;
       text-align: center;
     }
