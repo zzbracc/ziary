@@ -131,7 +131,7 @@ colorKeys.forEach((color, index) => {
     const container = document.getElementById("entries");
 
     const keys = Object.keys(localStorage)
-      .filter(k => k.startsWith("ziary-") && !k.includes("colorMap"))
+      .filter(k => k.startsWith("ziary-") && !k.includes("colorMap") && !k.includes("colorLabels"))
       .sort()
       .reverse();
 
