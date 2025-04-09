@@ -1,11 +1,12 @@
 
 <!DOCTYPE html>
+
 <html lang="zh-TW">
 <head>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta charset="utf-8">
+<meta charset="utf-8"/>
 <title>心情統計圖表</title>
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Zen+Maru+Gothic&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&amp;family=Zen+Maru+Gothic&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 @font-face {
@@ -37,13 +38,13 @@ body, h1, h2, h3, .note, input, textarea, button { font-family: 'JF Open 粉圓�
 <body>
 <h2 style="text-align: center; margin-top: 1rem;">📊 心情統計圖表</h2>
 <div style="margin-bottom: 1rem; display: flex; justify-content: center; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-  <input id="startMonth" type="month"/>
-  <span>至</span>
-  <input id="endMonth" type="month"/>
-  <button onclick="updateStats()">重新統計</button>
+<input id="startMonth" type="month"/>
+<span>至</span>
+<input id="endMonth" type="month"/>
+<button onclick="updateStats()">重新統計</button>
 </div>
 <canvas id="pieChart"></canvas>
-<canvas id="barChart" height="500"></canvas>
+<canvas height="500" id="barChart"></canvas>
 <script>
 const colorKeys = ["red", "orange", "yellow", "brown", "green", "blue", "teal", "gray", "black"];
 const userLabels = JSON.parse(localStorage.getItem("ziary-colorLabels") || "[]");
@@ -88,7 +89,15 @@ if (total === 0) {
   document.getElementById("pieChart").style.display = "block";
   document.getElementById("barChart").style.display = "block";
 
-  const pieChart = new Chart(document.getElementById("pieChart"), {
+  Chart.defaults.font.family = "'JF Open 粉圓體', 'Zen Maru Gothic', sans-serif";
+
+window.addEventListener('load', function () {
+Chart.defaults.font = {
+  family: "'JF Open 粉圓體', 'Zen Maru Gothic', sans-serif",
+  size: 14
+};
+
+const pieChart = new Chart(document.getElementById("pieChart"), {
     type: "pie",
     data: {
       labels: displayLabels,
@@ -151,6 +160,7 @@ if (total === 0) {
 
   window.pieChart = pieChart;
   window.barChart = barChart;
+}); // END LOAD
 }
 
 function updateStats() {
