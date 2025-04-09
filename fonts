@@ -1,5 +1,0 @@
-mkdir fonts
-cp huninn.woff2 fonts/
-git add fonts/huninn.woff2
-git commit -m "新增本地字型"
-git push
