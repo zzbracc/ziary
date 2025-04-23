@@ -30,13 +30,12 @@ function setSelectedColors(colors) {
 
 
 window.onload = () => {
-  // 自動帶入今天日期
   const dateInput = document.getElementById('date');
   const today = new Date().toISOString().split('T')[0];
   dateInput.value = today;
   loadEntry(today);
 
-  const circles = document.querySelectorAll('.circle');
+const circles = document.querySelectorAll('.circle');
   circles.forEach((circle, i) => {
     circle.style.borderColor = getColorHex(i);
     circle.style.backgroundColor = "white";
@@ -52,13 +51,6 @@ window.onload = () => {
       }
     });
   });
-
-  // 設定日期為今天
-  const today = new Date().toISOString().split('T')[0];
-  dateInput.value = today;
-  loadEntry(today);
-};
-
 };
 
 </script>
@@ -223,13 +215,12 @@ function setSelectedColors(colors) {
 
 
 window.onload = () => {
-  // 自動帶入今天日期
   const dateInput = document.getElementById('date');
   const today = new Date().toISOString().split('T')[0];
   dateInput.value = today;
   loadEntry(today);
 
-  const circles = document.querySelectorAll('.circle');
+const circles = document.querySelectorAll('.circle');
   circles.forEach((circle, i) => {
     circle.style.borderColor = getColorHex(i);
     circle.style.backgroundColor = "white";
@@ -283,15 +274,7 @@ function getSelectedColors() {
 }
 
 
-    function setSelectedColors(colors) {
-      circles.forEach(circle => {
-        const color = circle.dataset.color;
-        circle.classList.remove('selected-' + color);
-        if (colors.includes(color)) {
-          circle.classList.add('selected-' + color);
-        }
-      });
-    }
+    
 
     function saveEntry() {
       const date = dateInput.value;
@@ -346,13 +329,12 @@ function setSelectedColors(colors) {
 
 
 window.onload = () => {
-  // 自動帶入今天日期
   const dateInput = document.getElementById('date');
   const today = new Date().toISOString().split('T')[0];
   dateInput.value = today;
   loadEntry(today);
 
-  const circles = document.querySelectorAll('.circle');
+const circles = document.querySelectorAll('.circle');
   circles.forEach((circle, i) => {
     circle.style.borderColor = getColorHex(i);
     circle.style.backgroundColor = "white";
