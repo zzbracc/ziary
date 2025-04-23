@@ -30,12 +30,6 @@ function setSelectedColors(colors) {
 
 
 window.onload = () => {
-  // 自動帶入今天日期
-  const dateInput = document.getElementById('date');
-  const today = new Date().toISOString().split('T')[0];
-  dateInput.value = today;
-  loadEntry(today);
-
   const circles = document.querySelectorAll('.circle');
   circles.forEach((circle, i) => {
     circle.style.borderColor = getColorHex(i);
@@ -52,13 +46,6 @@ window.onload = () => {
       }
     });
   });
-
-  // 設定日期為今天
-  const today = new Date().toISOString().split('T')[0];
-  dateInput.value = today;
-  loadEntry(today);
-};
-
 };
 
 </script>
@@ -223,12 +210,6 @@ function setSelectedColors(colors) {
 
 
 window.onload = () => {
-  // 自動帶入今天日期
-  const dateInput = document.getElementById('date');
-  const today = new Date().toISOString().split('T')[0];
-  dateInput.value = today;
-  loadEntry(today);
-
   const circles = document.querySelectorAll('.circle');
   circles.forEach((circle, i) => {
     circle.style.borderColor = getColorHex(i);
@@ -346,12 +327,6 @@ function setSelectedColors(colors) {
 
 
 window.onload = () => {
-  // 自動帶入今天日期
-  const dateInput = document.getElementById('date');
-  const today = new Date().toISOString().split('T')[0];
-  dateInput.value = today;
-  loadEntry(today);
-
   const circles = document.querySelectorAll('.circle');
   circles.forEach((circle, i) => {
     circle.style.borderColor = getColorHex(i);
