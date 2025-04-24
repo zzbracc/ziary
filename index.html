@@ -8,47 +8,7 @@
 <link href="ziary-icon-192.png" rel="apple-touch-icon"/>
 <meta content="#30BEBF" name="theme-color"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
-<script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(() => console.log("Service Worker Registered"));
-    }
-  
 
-
-function setSelectedColors(colors) {
-  circles.forEach((circle, i) => {
-    const color = circle.dataset.color;
-    circle.classList.remove("selected");
-    circle.style.backgroundColor = "white";
-    if (colors.includes(color)) {
-      circle.classList.add("selected");
-      circle.style.backgroundColor = getColorHex(i);
-    }
-  });
-}
-
-
-window.onload = () => {
-  const circles = document.querySelectorAll('.circle');
-  circles.forEach((circle, i) => {
-    circle.style.borderColor = getColorHex(i);
-    circle.style.backgroundColor = "white";
-    circle.classList.remove("selected");
-
-    circle.addEventListener("click", () => {
-      if (circle.classList.contains("selected")) {
-        circle.classList.remove("selected");
-        circle.style.backgroundColor = "white";
-      } else {
-        circle.classList.add("selected");
-        circle.style.backgroundColor = getColorHex(i);
-      }
-    });
-  });
-};
-
-</script>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta charset="utf-8"/>
 <title>今天的紀錄</title>
@@ -189,46 +149,7 @@ label {
   max-width: 400px;
 }
 </style>
-<script>
-const userColorMap = JSON.parse(localStorage.getItem("ziary-colorMap") || "[]");
-const fallbackColorMap = ['#CC5F5A', '#ff9933', '#FFD700', '#B5866C', '#BED06F', '#769EDB', '#30BEBF', '#d3d3d3', '#000000'];
-const getColorHex = (i) => userColorMap[i] || fallbackColorMap[i];
 
-
-
-function setSelectedColors(colors) {
-  circles.forEach((circle, i) => {
-    const color = circle.dataset.color;
-    circle.classList.remove("selected");
-    circle.style.backgroundColor = "white";
-    if (colors.includes(color)) {
-      circle.classList.add("selected");
-      circle.style.backgroundColor = getColorHex(i);
-    }
-  });
-}
-
-
-window.onload = () => {
-  const circles = document.querySelectorAll('.circle');
-  circles.forEach((circle, i) => {
-    circle.style.borderColor = getColorHex(i);
-    circle.style.backgroundColor = "white";
-    circle.classList.remove("selected");
-
-    circle.addEventListener("click", () => {
-      if (circle.classList.contains("selected")) {
-        circle.classList.remove("selected");
-        circle.style.backgroundColor = "white";
-      } else {
-        circle.classList.add("selected");
-        circle.style.backgroundColor = getColorHex(i);
-      }
-    });
-  });
-};
-
-</script>
 </head>
 <body>
 <h1>今天的紀錄</h1>
@@ -253,81 +174,68 @@ window.onload = () => {
 <textarea id="note" placeholder="今天過得怎麼樣呢？"></textarea>
 </div>
 <button class="ziary-button" onclick="saveEntry()">儲存</button>
+
+
 <script>
-    const dateInput = document.getElementById('date');
-    const noteInput = document.getElementById('note');
-    const circles = document.querySelectorAll('.circle');
-
-    
-function getSelectedColors() {
-  return [...document.querySelectorAll('.circle.selected')].map(c => c.dataset.color);
-}
-
-
-    function setSelectedColors(colors) {
-      circles.forEach(circle => {
-        const color = circle.dataset.color;
-        circle.classList.remove('selected-' + color);
-        if (colors.includes(color)) {
-          circle.classList.add('selected-' + color);
-        }
-      });
-    }
-
-    function saveEntry() {
-      const date = dateInput.value;
-      if (!date) {
-        alert('請選擇日期');
-        return;
-      }
-      const entry = {
-        colors: getSelectedColors(),
-        note: noteInput.value
-      };
-      localStorage.setItem('ziary-' + date, JSON.stringify(entry));
-      alert('已儲存！');
-    }
-
-    function loadEntry(date) {
-      const saved = localStorage.getItem('ziary-' + date);
-      if (saved) {
-        const entry = JSON.parse(saved);
-        setSelectedColors(entry.colors || []);
-        noteInput.value = entry.note || '';
-      } else {
-        setSelectedColors([]);
-        noteInput.value = '';
-      }
-    }
-
-    dateInput.addEventListener('change', () => {
-      loadEntry(dateInput.value);
-    });
-
-    circles.forEach(circle => {
-      circle.addEventListener('click', () => {
-        const color = circle.dataset.color;
-        circle.classList.toggle('selected-' + color);
-      });
-    });
-  
-
-
-function setSelectedColors(colors) {
-  circles.forEach((circle, i) => {
-    const color = circle.dataset.color;
-    circle.classList.remove("selected");
-    circle.style.backgroundColor = "white";
-    if (colors.includes(color)) {
-      circle.classList.add("selected");
-      circle.style.backgroundColor = getColorHex(i);
-    }
-  });
-}
-
+const userColorMap = JSON.parse(localStorage.getItem("ziary-colorMap") || "[]");
+const fallbackColorMap = ['#CC5F5A', '#ff9933', '#FFD700', '#B5866C', '#BED06F', '#769EDB', '#30BEBF', '#d3d3d3', '#000000'];
+const getColorHex = (i) => userColorMap[i] || fallbackColorMap[i];
 
 window.onload = () => {
+  const dateInput = document.getElementById('date');
+  const noteInput = document.getElementById('note');
   const circles = document.querySelectorAll('.circle');
+
+  const today = new Date().toISOString().split('T')[0];
+  dateInput.value = today;
+
+  function setSelectedColors(colors) {
+    circles.forEach((circle, i) => {
+      const color = circle.dataset.color;
+      circle.classList.remove("selected");
+      circle.style.backgroundColor = "white";
+      if (colors.includes(color)) {
+        circle.classList.add("selected");
+        circle.style.backgroundColor = getColorHex(i);
+      }
+    });
+  }
+
+  function loadEntry(date) {
+    const saved = localStorage.getItem('ziary-' + date);
+    if (saved) {
+      const entry = JSON.parse(saved);
+      setSelectedColors(entry.colors || []);
+      noteInput.value = entry.note || '';
+    } else {
+      setSelectedColors([]);
+      noteInput.value = '';
+    }
+  }
+
+  function getSelectedColors() {
+    return [...document.querySelectorAll('.circle.selected')].map(c => c.dataset.color);
+  }
+
+  function saveEntry() {
+    const date = dateInput.value;
+    if (!date) {
+      alert('請選擇日期');
+      return;
+    }
+    const entry = {
+      colors: getSelectedColors(),
+      note: noteInput.value
+    };
+    localStorage.setItem('ziary-' + date, JSON.stringify(entry));
+    alert('已儲存！');
+  }
+  window.saveEntry = saveEntry;
+
+  dateInput.addEventListener('change', () => {
+    loadEntry(dateInput.value);
+  });
+
   circles.forEach((circle, i) => {
     circle.style.borderColor = getColorHex(i);
     circle.style.backgroundColor = "white";
@@ -343,8 +251,10 @@ window.onload = () => {
       }
     });
   });
-};
 
+  loadEntry(today);
+};
 </script>
+
 </body>
 </html>
