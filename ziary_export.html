@@ -53,17 +53,19 @@ body, h1, h2, h3, .note, input, textarea, button { font-family: 'JF Open 粉圓�
       background-color: #26a2a3;
     }
   
-.custom-upload {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #30BEBF;
-  color: white;
-  font-family: 'JF Open 粉圓體', 'Zen Maru Gothic', sans-serif;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-bottom: 10px;
+
+
+
+
+.custom-upload:hover {
+  background-color: #2aa5a7;
+  transform: scale(1.03);
 }
+.custom-upload:active {
+  background-color: #239294;
+  transform: scale(0.97);
+}
+
 
 
 
@@ -158,9 +160,24 @@ function importCSV() {
 <hr style="margin: 40px 0;"/>
 <h1>📥 匯入心情紀錄</h1>
 <p>請選擇先前匯出的 CSV 檔案（ziary_records.csv）：</p>
-<label class="custom-upload" for="importFile">📁 選擇 CSV 檔案</label>
-<input accept=".csv" id="importFile" style="display:none;" type="file"/>
-<button class="ziary-button" onclick="importCSV()">匯入資料</button>
+<div style="display:inline-flex; justify-content:center; align-items:center; gap:8px; flex-wrap:wrap;">
+  <button class="ziary-button" onclick="document.getElementById('importFile').click()">📁 選擇 CSV 檔案</button>
+  <input id="importFile" type="file" accept=".csv" style="position:fixed; top:-1000px; left:-1000px;" onchange="updateFileName()"/>
+  <button class="ziary-button" onclick="importCSV()">匯入資料</button>
+</div>
+<p id="fileNameDisplay" style="font-size: 14px; margin-top: 10px; color: #555;"></p>
 <p id="importStatus" style="margin-top: 10px; color: green;"></p>
+
+<script>
+function updateFileName() {
+  const fileInput = document.getElementById('importFile');
+  const display = document.getElementById('fileNameDisplay');
+  if (fileInput.files.length > 0) {
+    display.textContent = `已選擇：${fileInput.files[0].name}`;
+  } else {
+    display.textContent = "";
+  }
+}
+</script>
 </body>
 </html>
