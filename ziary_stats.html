@@ -17,18 +17,22 @@ body, h1, h2, h3, .note, input, textarea, button, select, label, canvas, p {
 }
 body {
   background-color: #fffaf5;
-  padding: 30px;
+  padding: 20px;
   text-align: center;
 }
-h1 {
-  font-size: 24px;
+h1, h2 {
+  font-size: 28px;
   margin-bottom: 20px;
 }
-canvas {
-  max-width: 100%;
+.chart-container {
+  width: 100%;
+  max-width: 800px;
   margin: 20px auto;
 }
-
+canvas {
+  width: 100% !important;
+  height: auto !important;
+}
 .ziary-button {
   padding: 10px 20px;
   font-size: 18px;
@@ -56,18 +60,39 @@ label {
   width: 100%;
   max-width: 400px;
 }
+.flex-controls {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+@media (max-width: 600px) {
+  h1, h2 {
+    font-size: 24px;
+  }
+  .ziary-button {
+    font-size: 16px;
+    padding: 8px 16px;
+  }
+}
 </style>
 </head>
 <body>
-<h2 style="text-align: center; margin-top: 1rem;">📊 心情統計圖表</h2>
-<div style="margin-bottom: 1rem; display: flex; justify-content: center; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+<h2>📊 心情統計圖表</h2>
+<div class="flex-controls">
   <input id="startMonth" type="month"/>
   <span>至</span>
   <input id="endMonth" type="month"/>
   <button class="ziary-button" onclick="updateStats()">重新統計</button>
 </div>
-<canvas id="pieChart" width="400" height="400"></canvas>
-<canvas id="barChart" width="800" height="600"></canvas>
+<div class="chart-container">
+  <canvas id="pieChart"></canvas>
+</div>
+<div class="chart-container">
+  <canvas id="barChart"></canvas>
+</div>
 <script>
 const colorKeys = ["red", "orange", "yellow", "brown", "green", "blue", "teal", "gray", "black"];
 const userLabels = JSON.parse(localStorage.getItem("ziary-colorLabels") || "[]");
@@ -77,16 +102,10 @@ colorKeys.forEach((key, index) => {
   colorLabels[key] = userLabel || "";
 });
 
-const defaultColors = [
-  "#CC5F5A", "#ff9933", "#FFD700",
-  "#B5866C", "#BED06F", "#769EDB",
-  "#30BEBF", "#d3d3d3", "#000000"
-];
+const defaultColors = ["#CC5F5A", "#ff9933", "#FFD700", "#B5866C", "#BED06F", "#769EDB", "#30BEBF", "#d3d3d3", "#000000"];
 const userColors = JSON.parse(localStorage.getItem("ziary-colorMap")) || defaultColors;
 const colorHex = {};
-colorKeys.forEach((key, index) => {
-  colorHex[key] = userColors[index];
-});
+colorKeys.forEach((key, index) => { colorHex[key] = userColors[index]; });
 
 window.addEventListener('load', function () {
   Chart.defaults.font = {
@@ -99,9 +118,7 @@ window.addEventListener('load', function () {
   const keys = Object.keys(localStorage).filter(k => k.startsWith("ziary-"));
   keys.forEach(k => {
     const entry = JSON.parse(localStorage.getItem(k));
-    (entry.colors || []).forEach(c => {
-      if (counts[c] !== undefined) counts[c]++;
-    });
+    (entry.colors || []).forEach(c => { if (counts[c] !== undefined) counts[c]++; });
   });
 
   const filteredLabels = Object.keys(counts).filter(c => counts[c] > 0);
@@ -111,30 +128,20 @@ window.addEventListener('load', function () {
 
   window.pieChart = new Chart(document.getElementById("pieChart"), {
     type: "pie",
-    data: {
-      labels: displayLabels,
-      datasets: [{ data: data, backgroundColor: backgroundColors }]
-    },
+    data: { labels: displayLabels, datasets: [{ data: data, backgroundColor: backgroundColors }] },
     options: {
-      responsive: false,
-      plugins: {
-        title: { display: true, text: "各心情顏色出現比例" }
-      }
+      responsive: true,
+      plugins: { title: { display: true, text: "各心情顏色出現比例" } }
     }
   });
 
   window.barChart = new Chart(document.getElementById("barChart"), {
     type: "bar",
-    data: {
-      labels: displayLabels,
-      datasets: [{ label: "出現次數", data: data, backgroundColor: backgroundColors }]
-    },
+    data: { labels: displayLabels, datasets: [{ label: "出現次數", data: data, backgroundColor: backgroundColors }] },
     options: {
       indexAxis: 'y',
-      responsive: false,
-      plugins: {
-        title: { display: true, text: "各心情顏色出現次數" }
-      },
+      responsive: true,
+      plugins: { title: { display: true, text: "各心情顏色出現次數" } },
       scales: {
         y: { beginAtZero: true, ticks: { font: { size: 14 }, padding: 8 } },
         x: { ticks: { font: { lineHeight: 1.2 }, display: true, maxRotation: 0, minRotation: 0 } }
@@ -155,21 +162,14 @@ function updateStats() {
   const [endYear, endMonthNum] = endMonth.split("-").map(Number);
   const end = new Date(endYear, endMonthNum, 0);
 
-  const counts = {
-    red: 0, orange: 0, yellow: 0,
-    brown: 0, green: 0, blue: 0,
-    teal: 0, gray: 0, black: 0
-  };
-
+  const counts = { red: 0, orange: 0, yellow: 0, brown: 0, green: 0, blue: 0, teal: 0, gray: 0, black: 0 };
   const keys = Object.keys(localStorage).filter(k => k.startsWith("ziary-"));
   keys.forEach(k => {
     const dateStr = k.replace("ziary-", "");
     const d = new Date(dateStr);
     if (d >= start && d <= end) {
       const entry = JSON.parse(localStorage.getItem(k));
-      (entry.colors || []).forEach(c => {
-        if (counts[c] !== undefined) counts[c]++;
-      });
+      (entry.colors || []).forEach(c => { if (counts[c] !== undefined) counts[c]++; });
     }
   });
 
@@ -190,16 +190,10 @@ function updateStats() {
 
   window.pieChart.data.labels = displayLabels;
   window.pieChart.data.datasets[0].data = data;
-  window.pieChart.options.responsive = false;
-  window.pieChart.canvas.parentNode.style.width = '400px';
-  window.pieChart.canvas.parentNode.style.height = '400px';
   window.pieChart.update();
 
   window.barChart.data.labels = displayLabels;
   window.barChart.data.datasets[0].data = data;
-  window.barChart.options.responsive = false;
-  window.barChart.canvas.parentNode.style.width = '800px';
-  window.barChart.canvas.parentNode.style.height = '600px';
   window.barChart.update();
 }
 </script>
