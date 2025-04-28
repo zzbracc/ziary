@@ -26,8 +26,14 @@ h1, h2 {
 }
 .chart-container {
   width: 100%;
-  max-width: 800px;
   margin: 20px auto;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+@media (min-width: 768px) {
+  .chart-container {
+    max-width: 800px;
+  }
 }
 canvas {
   width: 100% !important;
