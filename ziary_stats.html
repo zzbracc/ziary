@@ -99,6 +99,7 @@ label {
 <div class="chart-container">
   <canvas id="barChart"></canvas>
 </div>
+<p id="noDataMsg" style="display:none; font-size: 18px; color: #888;">本區間無記錄</p>
 <script>
 const colorKeys = ["red", "orange", "yellow", "brown", "green", "blue", "teal", "gray", "black"];
 const userLabels = JSON.parse(localStorage.getItem("ziary-colorLabels") || "[]");
@@ -114,6 +115,15 @@ const colorHex = {};
 colorKeys.forEach((key, index) => { colorHex[key] = userColors[index]; });
 
 window.addEventListener('load', function () {
+  // 預設統計區間為本月
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const monthStr = `${year}-${month}`;
+  document.getElementById("startMonth").value = monthStr;
+  document.getElementById("endMonth").value = monthStr;
+  
+
   Chart.defaults.font = {
     family: "'JF Open 粗圓體', 'Zen Maru Gothic', sans-serif",
     size: 14
@@ -154,6 +164,7 @@ window.addEventListener('load', function () {
       }
     }
   });
+  updateStats();
 });
 
 function updateStats() {
@@ -188,10 +199,12 @@ function updateStats() {
   if (total === 0) {
     document.getElementById("pieChart").style.display = "none";
     document.getElementById("barChart").style.display = "none";
+    document.getElementById("noDataMsg").style.display = "block";
     return;
   } else {
     document.getElementById("pieChart").style.display = "block";
     document.getElementById("barChart").style.display = "block";
+    document.getElementById("noDataMsg").style.display = "none";
   }
 
   window.pieChart.data.labels = displayLabels;
