@@ -171,6 +171,7 @@ label {
 <div class="buttons">
 <button class="ziary-button" onclick="openModal()">✏️</button>
 <button class="ziary-button" onclick="saveColors()">儲存</button>
+<button class="ziary-button" onclick="revertChanges()">還原</button>
 <button class="ziary-button" onclick="resetColors()">預設</button>
 </div>
 
@@ -188,9 +189,8 @@ label {
       const input = document.getElementById("color" + i);
       input.value = colorMap[i];
       input.addEventListener("input", () => {
-        colorMap[i] = input.value;
-        localStorage.setItem("ziary-colorMap", JSON.stringify(colorMap));
-      });
+  colorMap[i] = input.value;
+});
     }
 
     function resetColors() {
@@ -254,6 +254,17 @@ label {
     function closeModal() {
       document.getElementById("labelModal").style.display = "none";
     }
-  </script>
+  
+    let originalColorMap = [...colorMap]; // 儲存初始狀態
+
+    function revertChanges() {
+      for (let i = 0; i < 9; i++) {
+        const input = document.getElementById("color" + i);
+        input.value = originalColorMap[i];
+        colorMap[i] = originalColorMap[i];
+      }
+    }
+
+</script>
 </body>
 </html>
