@@ -132,7 +132,24 @@ window.addEventListener('load', function () {
     data: { labels: [], datasets: [{ data: [], backgroundColor: [] }] },
     options: {
       responsive: true,
-      plugins: { title: { display: true, text: "各心情顏色出現比例" } }
+      layout: {
+        padding: { bottom: 20 }
+      },
+      plugins: {
+        title: {
+          display: true,
+          text: "各心情顏色出現比例"
+        },
+        legend: {
+          position: "bottom",
+          labels: {
+            font: { size: 14 },
+            padding: 12,
+            boxWidth: 20,
+            boxHeight: 20
+          }
+        }
+      }
     }
   });
 
@@ -142,7 +159,17 @@ window.addEventListener('load', function () {
     options: {
       indexAxis: 'y',
       responsive: true,
-      plugins: { title: { display: true, text: "各心情顏色出現次數" } },
+      plugins: {
+        title: { display: true, text: "各心情顏色出現次數" },
+        legend: {
+          labels: {
+            font: { size: 14 },
+            boxWidth: 20,
+            boxHeight: 20,
+            padding: 12
+          }
+        }
+      },
       scales: {
         y: { beginAtZero: true, ticks: { font: { size: 14 }, padding: 8 } },
         x: { ticks: { font: { lineHeight: 1.2 }, display: true, maxRotation: 0, minRotation: 0 } }
