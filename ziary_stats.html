@@ -4,7 +4,27 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta charset="utf-8"/>
 <title>心情統計圖表</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js">
+function fixMissingDates() {
+  const repaired = [];
+  Object.keys(localStorage).filter(k => k.startsWith("ziary-") && /^\d{4}-\d{2}-\d{2}$/.test(k.replace("ziary-", ""))).forEach(k => {
+    const raw = localStorage.getItem(k);
+    try {
+      const entry = JSON.parse(raw);
+      const dateStr = k.replace("ziary-", "");
+      if (!entry.date) {
+        entry.date = dateStr;
+        localStorage.setItem(k, JSON.stringify(entry));
+        repaired.push(dateStr);
+      }
+    } catch (e) {
+      console.warn("❌ JSON 格式錯誤：", k);
+    }
+  });
+  alert(`已修復 ${repaired.length} 筆資料。請點擊「重新統計」查看結果。`);
+}
+
+</script>
 <style>
 @font-face {
   font-family: 'JF Open 粗圓體';
@@ -88,6 +108,8 @@ label {
 <body>
 <h2>📊 心情統計圖表</h2>
 <div class="flex-controls">
+  <button class="ziary-button" onclick="fixMissingDates()">🛠 一鍵修復資料</button>
+
   <input id="startMonth" type="month"/>
   <span>至</span>
   <input id="endMonth" type="month"/>
@@ -122,7 +144,7 @@ window.addEventListener('load', function () {
   const monthStr = `${year}-${month}`;
   document.getElementById("startMonth").value = monthStr;
   document.getElementById("endMonth").value = monthStr;
-    
+  
 
   Chart.defaults.font = {
     family: "'JF Open 粗圓體', 'Zen Maru Gothic', sans-serif",
@@ -177,16 +199,20 @@ function updateStats() {
 
   const start = new Date(startMonth + "-01");
   const [endYear, endMonthNum] = endMonth.split("-").map(Number);
-  const end = new Date(endYear, endMonthNum, 0);
+  const end = new Date(endYear, endMonthNum, 0); // 本月底
 
   const counts = { red: 0, orange: 0, yellow: 0, brown: 0, green: 0, blue: 0, teal: 0, gray: 0, black: 0 };
   const keys = Object.keys(localStorage).filter(k => k.startsWith("ziary-"));
   keys.forEach(k => {
-    const dateStr = k.replace("ziary-", "");
-    const d = new Date(dateStr);
-    if (d >= start && d <= end) {
+    try {
       const entry = JSON.parse(localStorage.getItem(k));
-      (entry.colors || []).forEach(c => { if (counts[c] !== undefined) counts[c]++; });
+      if (!entry.date) return; // ⛔ 沒有日期就略過
+      const d = new Date(entry.date);
+      if (d >= start && d <= end) {
+        (entry.colors || []).forEach(c => { if (counts[c] !== undefined) counts[c]++; });
+      }
+    } catch (e) {
+      console.warn("無法解析資料", k);
     }
   });
 
@@ -215,6 +241,26 @@ function updateStats() {
   window.barChart.data.datasets[0].data = data;
   window.barChart.update();
 }
+
+function fixMissingDates() {
+  const repaired = [];
+  Object.keys(localStorage).filter(k => k.startsWith("ziary-") && /^\d{4}-\d{2}-\d{2}$/.test(k.replace("ziary-", ""))).forEach(k => {
+    const raw = localStorage.getItem(k);
+    try {
+      const entry = JSON.parse(raw);
+      const dateStr = k.replace("ziary-", "");
+      if (!entry.date) {
+        entry.date = dateStr;
+        localStorage.setItem(k, JSON.stringify(entry));
+        repaired.push(dateStr);
+      }
+    } catch (e) {
+      console.warn("❌ JSON 格式錯誤：", k);
+    }
+  });
+  alert(`已修復 ${repaired.length} 筆資料。請點擊「重新統計」查看結果。`);
+}
+
 </script>
 </body>
 </html>
