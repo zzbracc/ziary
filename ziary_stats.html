@@ -4,95 +4,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <meta charset="utf-8"/>
 <title>心情統計圖表</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js">
-function fixMissingDates() {
-  const repaired = [];
-  Object.keys(localStorage).filter(k => k.startsWith("ziary-") && /^\d{4}-\d{2}-\d{2}$/.test(k.replace("ziary-", ""))).forEach(k => {
-    const raw = localStorage.getItem(k);
-    try {
-      const entry = JSON.parse(raw);
-      const dateStr = k.replace("ziary-", "");
-      if (!entry.date) {
-        entry.date = dateStr;
-        localStorage.setItem(k, JSON.stringify(entry));
-        repaired.push(dateStr);
-      }
-    } catch (e) {
-      console.warn("❌ JSON 格式錯誤：", k);
-    }
-  });
-  alert(`已修復 ${repaired.length} 筆資料。請點擊「重新統計」查看結果。`);
-}
-
-
-function showIncludedRecords() {
-  const startMonth = document.getElementById("startMonth").value;
-  const endMonth = document.getElementById("endMonth").value;
-  if (!startMonth || !endMonth) {
-    alert("請選擇起始與結束月份");
-    return;
-  }
-
-  const start = new Date(startMonth + "-01");
-  const [endYear, endMonthNum] = endMonth.split("-").map(Number);
-  const end = new Date(endYear, endMonthNum, 0); // 本月底
-
-  let output = "";
-  let count = 0;
-
-  Object.keys(localStorage).filter(k => k.startsWith("ziary-")).forEach(k => {
-    try {
-      const entry = JSON.parse(localStorage.getItem(k));
-      if (!entry.date) return;
-      const d = new Date(entry.date);
-      if (d >= start && d <= end) {
-        output += `<div><strong>${entry.date}</strong>: ${entry.colors?.join(", ") || "無顏色"}</div>`;
-        count++;
-      }
-    } catch (e) {
-      console.warn("資料錯誤：", k);
-    }
-  });
-
-  const container = document.getElementById("includedRecords");
-  container.innerHTML = output || "本區間無記錄";
-  container.style.display = "block";
-}
-
-
-function showBlueRecords() {
-  const output = [];
-  const startMonth = document.getElementById("startMonth").value;
-  const endMonth = document.getElementById("endMonth").value;
-  if (!startMonth || !endMonth) {
-    alert("請選擇起始與結束月份");
-    return;
-  }
-
-  const start = new Date(startMonth + "-01");
-  const [endYear, endMonthNum] = endMonth.split("-").map(Number);
-  const end = new Date(endYear, endMonthNum, 0);
-
-  Object.keys(localStorage).filter(k => k.startsWith("ziary-")).forEach(k => {
-    try {
-      const d = JSON.parse(localStorage.getItem(k));
-      if (d?.date && d.colors?.includes("blue")) {
-        const dateObj = new Date(d.date);
-        if (dateObj >= start && dateObj <= end) {
-          output.push(`<div><strong>${d.date}</strong>: ${d.colors.join(", ")}</div>`);
-        }
-      }
-    } catch (e) {
-      console.warn("錯誤資料", k);
-    }
-  });
-
-  const container = document.getElementById("blueRecords");
-  container.innerHTML = output.length ? output.join("") : "本月內未出現藍色記錄";
-  container.style.display = "block";
-}
-
-</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 @font-face {
   font-family: 'JF Open 粗圓體';
@@ -176,12 +88,6 @@ label {
 <body>
 <h2>📊 心情統計圖表</h2>
 <div class="flex-controls">
-  <button class="ziary-button" onclick="showBlueRecords()">🔵 檢查藍色資料</button>
-
-  <button class="ziary-button" onclick="showIncludedRecords()">📋 顯示清單</button>
-
-  <button class="ziary-button" onclick="fixMissingDates()">🛠 一鍵修復資料</button>
-
   <input id="startMonth" type="month"/>
   <span>至</span>
   <input id="endMonth" type="month"/>
@@ -193,12 +99,6 @@ label {
 <div class="chart-container">
   <canvas id="barChart"></canvas>
 </div>
-
-<div id="includedRecords" style="max-width: 600px; margin: 20px auto; text-align: left; font-size: 16px; background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 8px; display: none;"></div>
-
-
-<div id="blueRecords" style="max-width: 600px; margin: 20px auto; text-align: left; font-size: 16px; background: #eef6ff; border: 1px solid #aad; padding: 10px; border-radius: 8px; display: none;"></div>
-
 <p id="noDataMsg" style="display:none; font-size: 18px; color: #888;">本區間無記錄</p>
 <script>
 const colorKeys = ["red", "orange", "yellow", "brown", "green", "blue", "teal", "gray", "black"];
@@ -215,36 +115,21 @@ const colorHex = {};
 colorKeys.forEach((key, index) => { colorHex[key] = userColors[index]; });
 
 window.addEventListener('load', function () {
-  // 預設統計區間為本月
   const today = new Date();
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, '0');
   const monthStr = `${year}-${month}`;
   document.getElementById("startMonth").value = monthStr;
   document.getElementById("endMonth").value = monthStr;
-  
 
   Chart.defaults.font = {
     family: "'JF Open 粗圓體', 'Zen Maru Gothic', sans-serif",
     size: 14
   };
 
-  const counts = {};
-  Object.keys(colorLabels).forEach(c => counts[c] = 0);
-  const keys = Object.keys(localStorage).filter(k => k.startsWith("ziary-"));
-  keys.forEach(k => {
-    const entry = JSON.parse(localStorage.getItem(k));
-    (entry.colors || []).forEach(c => { if (counts[c] !== undefined) counts[c]++; });
-  });
-
-  const filteredLabels = Object.keys(counts).filter(c => counts[c] > 0);
-  const data = filteredLabels.map(c => counts[c]);
-  const backgroundColors = filteredLabels.map(c => colorHex[c]);
-  const displayLabels = filteredLabels.map(c => colorLabels[c] || "");
-
   window.pieChart = new Chart(document.getElementById("pieChart"), {
     type: "pie",
-    data: { labels: displayLabels, datasets: [{ data: data, backgroundColor: backgroundColors }] },
+    data: { labels: [], datasets: [{ data: [], backgroundColor: [] }] },
     options: {
       responsive: true,
       plugins: { title: { display: true, text: "各心情顏色出現比例" } }
@@ -253,7 +138,7 @@ window.addEventListener('load', function () {
 
   window.barChart = new Chart(document.getElementById("barChart"), {
     type: "bar",
-    data: { labels: displayLabels, datasets: [{ label: "出現次數", data: data, backgroundColor: backgroundColors }] },
+    data: { labels: [], datasets: [{ label: "出現次數", data: [], backgroundColor: [] }] },
     options: {
       indexAxis: 'y',
       responsive: true,
@@ -264,6 +149,7 @@ window.addEventListener('load', function () {
       }
     }
   });
+
   updateStats();
 });
 
@@ -277,20 +163,20 @@ function updateStats() {
 
   const start = new Date(startMonth + "-01");
   const [endYear, endMonthNum] = endMonth.split("-").map(Number);
-  const end = new Date(endYear, endMonthNum, 0); // 本月底
+  const end = new Date(endYear, endMonthNum, 0);
 
   const counts = { red: 0, orange: 0, yellow: 0, brown: 0, green: 0, blue: 0, teal: 0, gray: 0, black: 0 };
-  const keys = Object.keys(localStorage).filter(k => k.startsWith("ziary-"));
+  const keys = Object.keys(localStorage).filter(k => /^ziary-\d{4}-\d{2}-\d{2}$/.test(k));
   keys.forEach(k => {
-    try {
+    const dateStr = k.replace("ziary-", "");
+    const d = new Date(dateStr);
+    if (isNaN(d)) return;
+    if (d >= start && d <= end) {
       const entry = JSON.parse(localStorage.getItem(k));
-      if (!entry.date) return; // ⛔ 沒有日期就略過
-      const d = new Date(entry.date);
-      if (d >= start && d <= end) {
-        (entry.colors || []).forEach(c => { if (counts[c] !== undefined) counts[c]++; });
-      }
-    } catch (e) {
-      console.warn("無法解析資料", k);
+      if (!entry || !Array.isArray(entry.colors)) return;
+      entry.colors.forEach(c => {
+        if (counts[c] !== undefined) counts[c]++;
+      });
     }
   });
 
@@ -313,100 +199,16 @@ function updateStats() {
 
   window.pieChart.data.labels = displayLabels;
   window.pieChart.data.datasets[0].data = data;
+  window.pieChart.data.datasets[0].backgroundColor = backgroundColors;
   window.pieChart.update();
+  window.pieChart.resize();
 
   window.barChart.data.labels = displayLabels;
   window.barChart.data.datasets[0].data = data;
+  window.barChart.data.datasets[0].backgroundColor = backgroundColors;
   window.barChart.update();
+  window.barChart.resize();
 }
-
-function fixMissingDates() {
-  const repaired = [];
-  Object.keys(localStorage).filter(k => k.startsWith("ziary-") && /^\d{4}-\d{2}-\d{2}$/.test(k.replace("ziary-", ""))).forEach(k => {
-    const raw = localStorage.getItem(k);
-    try {
-      const entry = JSON.parse(raw);
-      const dateStr = k.replace("ziary-", "");
-      if (!entry.date) {
-        entry.date = dateStr;
-        localStorage.setItem(k, JSON.stringify(entry));
-        repaired.push(dateStr);
-      }
-    } catch (e) {
-      console.warn("❌ JSON 格式錯誤：", k);
-    }
-  });
-  alert(`已修復 ${repaired.length} 筆資料。請點擊「重新統計」查看結果。`);
-}
-
-
-function showIncludedRecords() {
-  const startMonth = document.getElementById("startMonth").value;
-  const endMonth = document.getElementById("endMonth").value;
-  if (!startMonth || !endMonth) {
-    alert("請選擇起始與結束月份");
-    return;
-  }
-
-  const start = new Date(startMonth + "-01");
-  const [endYear, endMonthNum] = endMonth.split("-").map(Number);
-  const end = new Date(endYear, endMonthNum, 0); // 本月底
-
-  let output = "";
-  let count = 0;
-
-  Object.keys(localStorage).filter(k => k.startsWith("ziary-")).forEach(k => {
-    try {
-      const entry = JSON.parse(localStorage.getItem(k));
-      if (!entry.date) return;
-      const d = new Date(entry.date);
-      if (d >= start && d <= end) {
-        output += `<div><strong>${entry.date}</strong>: ${entry.colors?.join(", ") || "無顏色"}</div>`;
-        count++;
-      }
-    } catch (e) {
-      console.warn("資料錯誤：", k);
-    }
-  });
-
-  const container = document.getElementById("includedRecords");
-  container.innerHTML = output || "本區間無記錄";
-  container.style.display = "block";
-}
-
-
-function showBlueRecords() {
-  const output = [];
-  const startMonth = document.getElementById("startMonth").value;
-  const endMonth = document.getElementById("endMonth").value;
-  if (!startMonth || !endMonth) {
-    alert("請選擇起始與結束月份");
-    return;
-  }
-
-  const start = new Date(startMonth + "-01");
-  const [endYear, endMonthNum] = endMonth.split("-").map(Number);
-  const end = new Date(endYear, endMonthNum, 0);
-
-  Object.keys(localStorage).filter(k => k.startsWith("ziary-")).forEach(k => {
-    try {
-      const d = JSON.parse(localStorage.getItem(k));
-      if (d?.date && d.colors?.includes("blue")) {
-        const dateObj = new Date(d.date);
-        if (dateObj >= start && dateObj <= end) {
-          output.push(`<div><strong>${d.date}</strong>: ${d.colors.join(", ")}</div>`);
-        }
-      }
-    } catch (e) {
-      console.warn("錯誤資料", k);
-    }
-  });
-
-  const container = document.getElementById("blueRecords");
-  container.innerHTML = output.length ? output.join("") : "本月內未出現藍色記錄";
-  container.style.display = "block";
-}
-
 </script>
 </body>
 </html>
