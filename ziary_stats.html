@@ -24,6 +24,41 @@ function fixMissingDates() {
   alert(`已修復 ${repaired.length} 筆資料。請點擊「重新統計」查看結果。`);
 }
 
+
+function showIncludedRecords() {
+  const startMonth = document.getElementById("startMonth").value;
+  const endMonth = document.getElementById("endMonth").value;
+  if (!startMonth || !endMonth) {
+    alert("請選擇起始與結束月份");
+    return;
+  }
+
+  const start = new Date(startMonth + "-01");
+  const [endYear, endMonthNum] = endMonth.split("-").map(Number);
+  const end = new Date(endYear, endMonthNum, 0); // 本月底
+
+  let output = "";
+  let count = 0;
+
+  Object.keys(localStorage).filter(k => k.startsWith("ziary-")).forEach(k => {
+    try {
+      const entry = JSON.parse(localStorage.getItem(k));
+      if (!entry.date) return;
+      const d = new Date(entry.date);
+      if (d >= start && d <= end) {
+        output += `<div><strong>${entry.date}</strong>: ${entry.colors?.join(", ") || "無顏色"}</div>`;
+        count++;
+      }
+    } catch (e) {
+      console.warn("資料錯誤：", k);
+    }
+  });
+
+  const container = document.getElementById("includedRecords");
+  container.innerHTML = output || "本區間無記錄";
+  container.style.display = "block";
+}
+
 </script>
 <style>
 @font-face {
@@ -108,7 +143,9 @@ label {
 <body>
 <h2>📊 心情統計圖表</h2>
 <div class="flex-controls">
-  <button class="ziary-button" onclick="fixMissingDates()">🛠 一鍵資料</button>
+  <button class="ziary-button" onclick="showIncludedRecords()">📋 顯示清單</button>
+
+  <button class="ziary-button" onclick="fixMissingDates()">🛠 一鍵修復資料</button>
 
   <input id="startMonth" type="month"/>
   <span>至</span>
@@ -121,6 +158,9 @@ label {
 <div class="chart-container">
   <canvas id="barChart"></canvas>
 </div>
+
+<div id="includedRecords" style="max-width: 600px; margin: 20px auto; text-align: left; font-size: 16px; background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 8px; display: none;"></div>
+
 <p id="noDataMsg" style="display:none; font-size: 18px; color: #888;">本區間無記錄</p>
 <script>
 const colorKeys = ["red", "orange", "yellow", "brown", "green", "blue", "teal", "gray", "black"];
@@ -259,6 +299,41 @@ function fixMissingDates() {
     }
   });
   alert(`已修復 ${repaired.length} 筆資料。請點擊「重新統計」查看結果。`);
+}
+
+
+function showIncludedRecords() {
+  const startMonth = document.getElementById("startMonth").value;
+  const endMonth = document.getElementById("endMonth").value;
+  if (!startMonth || !endMonth) {
+    alert("請選擇起始與結束月份");
+    return;
+  }
+
+  const start = new Date(startMonth + "-01");
+  const [endYear, endMonthNum] = endMonth.split("-").map(Number);
+  const end = new Date(endYear, endMonthNum, 0); // 本月底
+
+  let output = "";
+  let count = 0;
+
+  Object.keys(localStorage).filter(k => k.startsWith("ziary-")).forEach(k => {
+    try {
+      const entry = JSON.parse(localStorage.getItem(k));
+      if (!entry.date) return;
+      const d = new Date(entry.date);
+      if (d >= start && d <= end) {
+        output += `<div><strong>${entry.date}</strong>: ${entry.colors?.join(", ") || "無顏色"}</div>`;
+        count++;
+      }
+    } catch (e) {
+      console.warn("資料錯誤：", k);
+    }
+  });
+
+  const container = document.getElementById("includedRecords");
+  container.innerHTML = output || "本區間無記錄";
+  container.style.display = "block";
 }
 
 </script>
