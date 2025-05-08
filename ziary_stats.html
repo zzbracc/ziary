@@ -59,6 +59,39 @@ function showIncludedRecords() {
   container.style.display = "block";
 }
 
+
+function showBlueRecords() {
+  const output = [];
+  const startMonth = document.getElementById("startMonth").value;
+  const endMonth = document.getElementById("endMonth").value;
+  if (!startMonth || !endMonth) {
+    alert("請選擇起始與結束月份");
+    return;
+  }
+
+  const start = new Date(startMonth + "-01");
+  const [endYear, endMonthNum] = endMonth.split("-").map(Number);
+  const end = new Date(endYear, endMonthNum, 0);
+
+  Object.keys(localStorage).filter(k => k.startsWith("ziary-")).forEach(k => {
+    try {
+      const d = JSON.parse(localStorage.getItem(k));
+      if (d?.date && d.colors?.includes("blue")) {
+        const dateObj = new Date(d.date);
+        if (dateObj >= start && dateObj <= end) {
+          output.push(`<div><strong>${d.date}</strong>: ${d.colors.join(", ")}</div>`);
+        }
+      }
+    } catch (e) {
+      console.warn("錯誤資料", k);
+    }
+  });
+
+  const container = document.getElementById("blueRecords");
+  container.innerHTML = output.length ? output.join("") : "本月內未出現藍色記錄";
+  container.style.display = "block";
+}
+
 </script>
 <style>
 @font-face {
@@ -143,6 +176,8 @@ label {
 <body>
 <h2>📊 心情統計圖表</h2>
 <div class="flex-controls">
+  <button class="ziary-button" onclick="showBlueRecords()">🔵 檢查藍色資料</button>
+
   <button class="ziary-button" onclick="showIncludedRecords()">📋 顯示清單</button>
 
   <button class="ziary-button" onclick="fixMissingDates()">🛠 一鍵修復資料</button>
@@ -160,6 +195,9 @@ label {
 </div>
 
 <div id="includedRecords" style="max-width: 600px; margin: 20px auto; text-align: left; font-size: 16px; background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 8px; display: none;"></div>
+
+
+<div id="blueRecords" style="max-width: 600px; margin: 20px auto; text-align: left; font-size: 16px; background: #eef6ff; border: 1px solid #aad; padding: 10px; border-radius: 8px; display: none;"></div>
 
 <p id="noDataMsg" style="display:none; font-size: 18px; color: #888;">本區間無記錄</p>
 <script>
@@ -333,6 +371,39 @@ function showIncludedRecords() {
 
   const container = document.getElementById("includedRecords");
   container.innerHTML = output || "本區間無記錄";
+  container.style.display = "block";
+}
+
+
+function showBlueRecords() {
+  const output = [];
+  const startMonth = document.getElementById("startMonth").value;
+  const endMonth = document.getElementById("endMonth").value;
+  if (!startMonth || !endMonth) {
+    alert("請選擇起始與結束月份");
+    return;
+  }
+
+  const start = new Date(startMonth + "-01");
+  const [endYear, endMonthNum] = endMonth.split("-").map(Number);
+  const end = new Date(endYear, endMonthNum, 0);
+
+  Object.keys(localStorage).filter(k => k.startsWith("ziary-")).forEach(k => {
+    try {
+      const d = JSON.parse(localStorage.getItem(k));
+      if (d?.date && d.colors?.includes("blue")) {
+        const dateObj = new Date(d.date);
+        if (dateObj >= start && dateObj <= end) {
+          output.push(`<div><strong>${d.date}</strong>: ${d.colors.join(", ")}</div>`);
+        }
+      }
+    } catch (e) {
+      console.warn("錯誤資料", k);
+    }
+  });
+
+  const container = document.getElementById("blueRecords");
+  container.innerHTML = output.length ? output.join("") : "本月內未出現藍色記錄";
   container.style.display = "block";
 }
 
