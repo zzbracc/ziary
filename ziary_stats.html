@@ -101,6 +101,7 @@ label {
 </div>
 <p id="noDataMsg" style="display:none; font-size: 18px; color: #888;">本區間無記錄</p>
 <script>
+let hiddenIndexes = new Set();
 const colorKeys = ["red", "orange", "yellow", "brown", "green", "blue", "teal", "gray", "black"];
 const userLabels = JSON.parse(localStorage.getItem("ziary-colorLabels") || "[]");
 const colorLabels = {};
@@ -145,6 +146,34 @@ window.addEventListener('load', function () {
           labels: {
             font: { size: 14 },
             padding: 12,
+            usePointStyle: true,
+            pointStyle: 'circle',
+            boxWidth: 20,
+            boxHeight: 20
+          },
+          onClick: function (e, legendItem, legend) {
+            const index = legendItem.index;
+            const ci = legend.chart;
+            const meta = ci.getDatasetMeta(0);
+            const hidden = meta.data[index].hidden = !meta.data[index].hidden;
+
+            if (hidden) {
+              hiddenIndexes.add(index);
+            } else {
+              hiddenIndexes.delete(index);
+            }
+
+            applyLegendSync();
+          }
+        }
+,
+        legend: {
+          position: "bottom",
+          labels: {
+            font: { size: 14 },
+            padding: 12,
+            usePointStyle: true,
+            pointStyle: 'circle',
             boxWidth: 20,
             boxHeight: 20
           }
@@ -161,12 +190,13 @@ window.addEventListener('load', function () {
       responsive: true,
       plugins: {
         title: { display: true, text: "各心情顏色出現次數" },
+        legend: { display: false },
         legend: {
           labels: {
             font: { size: 14 },
-            boxWidth: 20,
-            boxHeight: 20,
-            padding: 12
+            padding: 12,
+            usePointStyle: true,
+            pointStyle: 'circle'
           }
         }
       },
@@ -187,6 +217,22 @@ function updateStats() {
     alert("請選擇起始與結束月份");
     return;
   }
+
+function applyLegendSync() {
+  const pieMeta = window.pieChart.getDatasetMeta(0);
+  const barMeta = window.barChart.getDatasetMeta(0);
+
+  pieMeta.data.forEach((slice, i) => {
+    slice.hidden = hiddenIndexes.has(i);
+  });
+  barMeta.data.forEach((bar, i) => {
+    bar.hidden = hiddenIndexes.has(i);
+  });
+
+  window.pieChart.update();
+  window.barChart.update();
+}
+
 
   const start = new Date(startMonth + "-01");
   const [endYear, endMonthNum] = endMonth.split("-").map(Number);
