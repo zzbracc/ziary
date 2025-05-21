@@ -348,27 +348,12 @@ if (selectedColors.includes(color)) {
     
 
           cell.appendChild(dots);
-          cell.addEventListener("click", () => {
-            const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateIndex).padStart(2, '0')}`;
-            const entry = localStorage.getItem("ziary-" + fullDate);
+          
+if (i >= startDay && dateIndex <= lastDate) {
+  cell.addEventListener("click", () => {
+    const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateIndex).padStart(2, '0')}`;
+    const entry = localStorage.getItem("ziary-" + fullDate);
 
-            let data = { colors: [], note: "" };
-            if (entry) {
-              data = JSON.parse(entry);
-              if (data.text && !data.note) {
-                data.note = data.text;
-              }
-            }
-
-            openModal(fullDate, data);
-          });
-
-        }
-        
-          cell.addEventListener("click", () => {
-            const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateIndex).padStart(2, '0')}`;
-            const entry = localStorage.getItem("ziary-" + fullDate);
-            
     let data = { colors: [], note: "" };
     if (entry) {
       data = JSON.parse(entry);
@@ -376,9 +361,32 @@ if (selectedColors.includes(color)) {
         data.note = data.text;
       }
     }
+
+    openModal(fullDate, data);
+  });
+}
     
-            openModal(fullDate, data);
-          });
+
+        }
+        
+          
+if (i >= startDay && dateIndex <= lastDate) {
+  cell.addEventListener("click", () => {
+    const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateIndex).padStart(2, '0')}`;
+    const entry = localStorage.getItem("ziary-" + fullDate);
+
+    let data = { colors: [], note: "" };
+    if (entry) {
+      data = JSON.parse(entry);
+      if (data.text && !data.note) {
+        data.note = data.text;
+      }
+    }
+
+    openModal(fullDate, data);
+  });
+}
+    
           calendar.appendChild(cell);
     
       }
