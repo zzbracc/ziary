@@ -266,21 +266,29 @@ function toggleColor(color) {
   renderModalDots();
 }
 
+
 function renderModalDots() {
   const modalDots = document.getElementById("modalEditDots");
   modalDots.innerHTML = "";
-  allColors.forEach(color => {
+  allColors.forEach((color, index) => {
     const dot = document.createElement("div");
     dot.className = "dot";
+
+    const hex = getColorHex(index);
+
     if (currentSelectedColors.includes(color)) {
       dot.classList.add(colorClassMap[color]);
+      dot.style.backgroundColor = hex;
+      dot.style.borderColor = hex;
+    } else {
+      dot.style.backgroundColor = "transparent";
+      dot.style.borderColor = hex;
     }
-    dot.style.borderColor = getColorHex(allColors.indexOf(color));
-        dot.addEventListener("click", () => toggleColor(color));
+
+    dot.addEventListener("click", () => toggleColor(color));
     modalDots.appendChild(dot);
   });
 }
-
 function openModal(fullDate, data) {
   currentEditDate = fullDate;
   currentSelectedColors = data.colors ? [...data.colors] : [];
@@ -365,12 +373,9 @@ function generateCalendar(month, year) {
     
 
           cell.appendChild(dots);
-        }
-        
-          cell.addEventListener("click", () => {
-            const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateIndex).padStart(2, '0')}`;
-            const entry = localStorage.getItem("ziary-" + fullDate);
-            
+  cell.addEventListener("click", () => {
+    const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateIndex).padStart(2, '0')}`;
+    const entry = localStorage.getItem("ziary-" + fullDate);
     let data = { colors: [], note: "" };
     if (entry) {
       data = JSON.parse(entry);
@@ -378,10 +383,10 @@ function generateCalendar(month, year) {
         data.note = data.text;
       }
     }
-    
-            openModal(fullDate, data);
-          });
-          calendar.appendChild(cell);
+    openModal(fullDate, data);
+  });
+}
+calendar.appendChild(cell);
     
       }
     }
