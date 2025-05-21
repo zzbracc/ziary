@@ -103,7 +103,7 @@ body, h1, h2, h3, .note, input, textarea, button { font-family: 'JF Open 粉圓�
       flex-direction: column;
       justify-content: space-between;
       aspect-ratio: 1 / 1;
-      padding: 2px;
+      padding: 4px;
       box-sizing: border-box;
     }
 
@@ -115,24 +115,20 @@ body, h1, h2, h3, .note, input, textarea, button { font-family: 'JF Open 粉圓�
     }
 
     .dots {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 2px;
-  width: 100%;
-  height: 100%;
-  padding: 2px;
-  justify-items: center;
-  align-items: center;
-}
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      flex-grow: 1;
+      align-items: center;
+      justify-items: center;
+    }
 
     .dot {
-  width: 80%;
-  height: 80%;
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  border: 1px solid #ccc;
-}
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1px solid #ccc;
+    }
 
     .filled-red { background-color: #CC5F5A; border-color: #CC5F5A; }
     .filled-orange { background-color: #ff9933; border-color: #ff9933; }
@@ -148,11 +144,7 @@ body, h1, h2, h3, .note, input, textarea, button { font-family: 'JF Open 粉圓�
   display: none;
 }
 .dot {
-  width: 80%;
-  height: 80%;
   aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  border: 1px solid #ccc;
 }
 
 .date-dot {
@@ -189,20 +181,6 @@ select {
   background-color: #239294;
   transform: scale(0.97);
 }
-.modal-flex {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 24px;
-  margin-bottom: 12px;
-}
-.modal-date-block {
-  font-weight: bold;
-  font-size: 28px;
-  line-height: 1.2;
-  text-align: left;
-}
-
 label {
   font-size: 18px;
   margin-bottom: 6px;
@@ -211,73 +189,6 @@ label {
   width: 100%;
   max-width: 400px;
 }
-
-
-  .dots {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 2px;
-  width: 100%;
-  height: 100%;
-  padding: 2px;
-  justify-items: center;
-  align-items: center;
-}
-  .day {
-    padding: 1px;
-  }
-}
-
-
-@media (max-width: 480px) {
-  .dot {
-  width: 80%;
-  height: 80%;
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  border: 1px solid #ccc;
-}
-  .dots {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 2px;
-  width: 100%;
-  height: 100%;
-  padding: 2px;
-  justify-items: center;
-  align-items: center;
-}
-  .day {
-    padding: 1px;
-  }
-}
-
-@media (min-width: 768px) {
-  .dot {
-  width: 80%;
-  height: 80%;
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  border: 1px solid #ccc;
-}
-  .dots {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  gap: 2px;
-  width: 100%;
-  height: 100%;
-  padding: 2px;
-  justify-items: center;
-  align-items: center;
-}
-  .day {
-    padding: 4px;
-  }
-}
-
 </style>
 <script>
 const userColorMap = JSON.parse(localStorage.getItem("ziary-colorMap") || "[]");
@@ -294,10 +205,8 @@ const getColorHex = (i) => userColorMap[i] || fallbackColorMap[i];
 </div>
 <div class="modal-overlay" id="modalOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);align-items:center;justify-content:center;z-index:999;">
 <div class="modal" style="background:#fff;border-radius:12px;padding:16px;width:90%;max-width:340px;text-align:center;">
-<div class="modal-flex">
-  <div class="modal-date-block" id="modalDateBlock"></div>
-  <div class="dots" id="modalEditDots"></div>
-</div>
+<h2 id="modalDate" style="margin-top:0;"></h2>
+<div class="dots" id="modalEditDots"></div>
 <textarea id="modalNoteInput" placeholder="輸入今天的文字記錄" style="width:100%;height:120px;margin-top:10px;"></textarea><br/>
 <button class="ziary-button" onclick="saveModal()" style="margin-top:10px;background:#30BEBF;color:white;border:none;padding:6px 12px;border-radius:6px;">儲存</button>
 <button class="ziary-button" onclick="closeModal()" style="margin-top:10px;background:#30BEBF;color:white;border:none;padding:6px 12px;border-radius:6px;">取消</button>
@@ -336,38 +245,27 @@ function toggleColor(color) {
   renderModalDots();
 }
 
-
 function renderModalDots() {
   const modalDots = document.getElementById("modalEditDots");
   modalDots.innerHTML = "";
-  allColors.forEach((color, index) => {
+  allColors.forEach(color => {
     const dot = document.createElement("div");
     dot.className = "dot";
-
-    const hex = getColorHex(index);
-
     if (currentSelectedColors.includes(color)) {
       dot.classList.add(colorClassMap[color]);
-      dot.style.backgroundColor = hex;
-      dot.style.borderColor = hex;
-    } else {
-      dot.style.backgroundColor = "transparent";
-      dot.style.borderColor = hex;
     }
-
-    dot.addEventListener("click", () => toggleColor(color));
+    dot.style.borderColor = getColorHex(allColors.indexOf(color));
+        dot.addEventListener("click", () => toggleColor(color));
     modalDots.appendChild(dot);
   });
 }
+
 function openModal(fullDate, data) {
   currentEditDate = fullDate;
   currentSelectedColors = data.colors ? [...data.colors] : [];
   renderModalDots();
   document.getElementById("modalNoteInput").value = data.note || "";
-  
-    const [y, m, d] = fullDate.split("-");
-    document.getElementById("modalDateBlock").innerHTML = y + "<br/>" + m + d;
-    
+  document.getElementById("modalDate").textContent = fullDate;
   document.getElementById("modalOverlay").style.display = "flex";
 }
 
