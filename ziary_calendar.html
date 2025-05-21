@@ -116,15 +116,13 @@ body, h1, h2, h3, .note, input, textarea, button { font-family: 'JF Open 粉圓�
 
     .dots {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(3, 1fr);
-      gap: 6px;
-      width: 100%;
-      height: 100%;
-      padding: 6px;
-      box-sizing: border-box;
-      justify-items: center;
+      grid-template-columns: repeat(3, auto);
+      gap: 12px;
+      justify-content: center;
       align-items: center;
+      flex-grow: 1;
+      align-items: center;
+      justify-items: center;
     }
 
     .dot {
@@ -148,11 +146,11 @@ body, h1, h2, h3, .note, input, textarea, button { font-family: 'JF Open 粉圓�
   display: none;
 }
 .dot {
-  width: 24px;
-  height: 24px;
-  margin: 2px;
-  aspect-ratio: 1 / 1;
-}
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1px solid #ccc;
+    }
 
 .date-dot {
   font-size: 11px;
@@ -210,15 +208,6 @@ label {
   width: 100%;
   max-width: 400px;
 }
-
-#modalEditDots {
-  display: grid;
-  grid-template-columns: repeat(3, auto);
-  gap: 12px;
-  justify-content: center;
-  align-items: center;
-}
-
 </style>
 <script>
 const userColorMap = JSON.parse(localStorage.getItem("ziary-colorMap") || "[]");
@@ -227,7 +216,7 @@ const getColorHex = (i) => userColorMap[i] || fallbackColorMap[i];
 </script>
 </head>
 <body>
-<h1>心情月...曆總覽</h1>
+<h1>心情月曆總覽</h1>
 <div class="link"><a href="ziary_home.html">🏠 回功能頁</a></div>
 <div>
 <select id="month"></select>
@@ -384,9 +373,12 @@ function generateCalendar(month, year) {
     
 
           cell.appendChild(dots);
-  cell.addEventListener("click", () => {
-    const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateIndex).padStart(2, '0')}`;
-    const entry = localStorage.getItem("ziary-" + fullDate);
+        }
+        
+          cell.addEventListener("click", () => {
+            const fullDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(dateIndex).padStart(2, '0')}`;
+            const entry = localStorage.getItem("ziary-" + fullDate);
+            
     let data = { colors: [], note: "" };
     if (entry) {
       data = JSON.parse(entry);
@@ -394,10 +386,10 @@ function generateCalendar(month, year) {
         data.note = data.text;
       }
     }
-    openModal(fullDate, data);
-  });
-}
-calendar.appendChild(cell);
+    
+            openModal(fullDate, data);
+          });
+          calendar.appendChild(cell);
     
       }
     }
