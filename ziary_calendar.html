@@ -284,7 +284,7 @@ function generateCalendar(month, year) {
         const dot = document.createElement("div");
         dot.className = "dot";
         dot.style.backgroundColor = selectedColors.includes(color) ? getColorHex(index) : "transparent";
-        dot.style.borderColor = getColorHex(index);
+        dot.style.borderColor = "#ccc";
         if (index === 4) {
           dot.textContent = dateIndex;
           dot.classList.add("date-dot");
