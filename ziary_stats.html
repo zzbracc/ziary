@@ -115,6 +115,96 @@ const userColors = JSON.parse(localStorage.getItem("ziary-colorMap")) || default
 const colorHex = {};
 colorKeys.forEach((key, index) => { colorHex[key] = userColors[index]; });
 
+function applyLegendSync() {
+  const pieMeta = window.pieChart.getDatasetMeta(0);
+
+  pieMeta.data.forEach((slice, i) => {
+    slice.hidden = hiddenIndexes.has(i);
+  });
+
+  // 過濾 pieChart 當前可見的資料來更新 barChart
+  const pieLabels = window.pieChart.data.labels;
+  const pieData = window.pieChart.data.datasets[0].data;
+  const pieColors = window.pieChart.data.datasets[0].backgroundColor;
+
+  const newLabels = [];
+  const newData = [];
+  const newColors = [];
+
+  pieLabels.forEach((label, i) => {
+    if (!hiddenIndexes.has(i)) {
+      newLabels.push(label);
+      newData.push(pieData[i]);
+      newColors.push(pieColors[i]);
+    }
+  });
+
+  window.barChart.data.labels = newLabels;
+  window.barChart.data.datasets[0].data = newData;
+  window.barChart.data.datasets[0].backgroundColor = newColors;
+
+  window.pieChart.update();
+  window.barChart.update();
+}
+
+function updateStats() {
+  const startMonth = document.getElementById("startMonth").value;
+  const endMonth = document.getElementById("endMonth").value;
+  if (!startMonth || !endMonth) {
+    alert("請選擇起始與結束月份");
+    return;
+  }
+
+  const start = new Date(startMonth + "-01");
+  const [endYear, endMonthNum] = endMonth.split("-").map(Number);
+  const end = new Date(endYear, endMonthNum, 0);
+
+  const counts = { red: 0, orange: 0, yellow: 0, brown: 0, green: 0, blue: 0, teal: 0, gray: 0, black: 0 };
+  const keys = Object.keys(localStorage).filter(k => /^ziary-\d{4}-\d{2}-\d{2}$/.test(k));
+  keys.forEach(k => {
+    const dateStr = k.replace("ziary-", "");
+    const d = new Date(dateStr);
+    if (isNaN(d)) return;
+    if (d >= start && d <= end) {
+      const entry = JSON.parse(localStorage.getItem(k));
+      if (!entry || !Array.isArray(entry.colors)) return;
+      entry.colors.forEach(c => {
+        if (counts[c] !== undefined) counts[c]++;
+      });
+    }
+  });
+
+  const filteredLabels = Object.keys(counts).filter(c => counts[c] > 0);
+  const data = filteredLabels.map(c => counts[c]);
+  const backgroundColors = filteredLabels.map(c => colorHex[c]);
+  const displayLabels = filteredLabels.map(c => colorLabels[c] || "");
+
+  const total = data.reduce((sum, val) => sum + val, 0);
+  if (total === 0) {
+    document.getElementById("pieChart").style.display = "none";
+    document.getElementById("barChart").style.display = "none";
+    document.getElementById("noDataMsg").style.display = "block";
+    return;
+  } else {
+    document.getElementById("pieChart").style.display = "block";
+    document.getElementById("barChart").style.display = "block";
+    document.getElementById("noDataMsg").style.display = "none";
+  }
+
+  hiddenIndexes.clear();
+  window.pieChart.data.labels = displayLabels;
+  window.pieChart.data.datasets[0].data = data;
+  window.pieChart.data.datasets[0].backgroundColor = backgroundColors;
+  window.pieChart.update();
+  window.pieChart.resize();
+
+  window.barChart.data.labels = displayLabels;
+  window.barChart.data.datasets[0].data = data;
+  window.barChart.data.datasets[0].backgroundColor = backgroundColors;
+  window.barChart.update();
+  window.barChart.resize();
+}
+
 window.addEventListener('load', function () {
   const today = new Date();
   const year = today.getFullYear();
@@ -166,18 +256,6 @@ window.addEventListener('load', function () {
             applyLegendSync();
           }
         }
-,
-        legend: {
-          position: "bottom",
-          labels: {
-            font: { size: 14 },
-            padding: 12,
-            usePointStyle: true,
-            pointStyle: 'circle',
-            boxWidth: 20,
-            boxHeight: 20
-          }
-        }
       }
     }
   });
@@ -190,15 +268,7 @@ window.addEventListener('load', function () {
       responsive: true,
       plugins: {
         title: { display: true, text: "各心情顏色出現次數" },
-        legend: { display: false },
-        legend: {
-          labels: {
-            font: { size: 14 },
-            padding: 12,
-            usePointStyle: true,
-            pointStyle: 'circle'
-          }
-        }
+        legend: { display: false }
       },
       scales: {
         y: { beginAtZero: true, ticks: { font: { size: 14 }, padding: 8 } },
@@ -209,79 +279,7 @@ window.addEventListener('load', function () {
 
   updateStats();
 });
-
-function updateStats() {
-  const startMonth = document.getElementById("startMonth").value;
-  const endMonth = document.getElementById("endMonth").value;
-  if (!startMonth || !endMonth) {
-    alert("請選擇起始與結束月份");
-    return;
-  }
-
-function applyLegendSync() {
-  const pieMeta = window.pieChart.getDatasetMeta(0);
-  const barMeta = window.barChart.getDatasetMeta(0);
-
-  pieMeta.data.forEach((slice, i) => {
-    slice.hidden = hiddenIndexes.has(i);
-  });
-  barMeta.data.forEach((bar, i) => {
-    bar.hidden = hiddenIndexes.has(i);
-  });
-
-  window.pieChart.update();
-  window.barChart.update();
-}
-
-
-  const start = new Date(startMonth + "-01");
-  const [endYear, endMonthNum] = endMonth.split("-").map(Number);
-  const end = new Date(endYear, endMonthNum, 0);
-
-  const counts = { red: 0, orange: 0, yellow: 0, brown: 0, green: 0, blue: 0, teal: 0, gray: 0, black: 0 };
-  const keys = Object.keys(localStorage).filter(k => /^ziary-\d{4}-\d{2}-\d{2}$/.test(k));
-  keys.forEach(k => {
-    const dateStr = k.replace("ziary-", "");
-    const d = new Date(dateStr);
-    if (isNaN(d)) return;
-    if (d >= start && d <= end) {
-      const entry = JSON.parse(localStorage.getItem(k));
-      if (!entry || !Array.isArray(entry.colors)) return;
-      entry.colors.forEach(c => {
-        if (counts[c] !== undefined) counts[c]++;
-      });
-    }
-  });
-
-  const filteredLabels = Object.keys(counts).filter(c => counts[c] > 0);
-  const data = filteredLabels.map(c => counts[c]);
-  const backgroundColors = filteredLabels.map(c => colorHex[c]);
-  const displayLabels = filteredLabels.map(c => colorLabels[c] || "");
-
-  const total = data.reduce((sum, val) => sum + val, 0);
-  if (total === 0) {
-    document.getElementById("pieChart").style.display = "none";
-    document.getElementById("barChart").style.display = "none";
-    document.getElementById("noDataMsg").style.display = "block";
-    return;
-  } else {
-    document.getElementById("pieChart").style.display = "block";
-    document.getElementById("barChart").style.display = "block";
-    document.getElementById("noDataMsg").style.display = "none";
-  }
-
-  window.pieChart.data.labels = displayLabels;
-  window.pieChart.data.datasets[0].data = data;
-  window.pieChart.data.datasets[0].backgroundColor = backgroundColors;
-  window.pieChart.update();
-  window.pieChart.resize();
-
-  window.barChart.data.labels = displayLabels;
-  window.barChart.data.datasets[0].data = data;
-  window.barChart.data.datasets[0].backgroundColor = backgroundColors;
-  window.barChart.update();
-  window.barChart.resize();
-}
 </script>
+
 </body>
 </html>
