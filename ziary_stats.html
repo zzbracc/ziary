@@ -148,6 +148,7 @@ function applyLegendSync() {
 }
 
 function updateStats() {
+  hiddenIndexes.clear();
   const startMonth = document.getElementById("startMonth").value;
   const endMonth = document.getElementById("endMonth").value;
   if (!startMonth || !endMonth) {
@@ -203,6 +204,7 @@ function updateStats() {
   window.barChart.data.datasets[0].backgroundColor = backgroundColors;
   window.barChart.update();
   window.barChart.resize();
+  applyLegendSync();
 }
 
 window.addEventListener('load', function () {
