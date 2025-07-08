@@ -159,6 +159,7 @@ function updateStats() {
   const start = new Date(startMonth + "-01");
   const [endYear, endMonthNum] = endMonth.split("-").map(Number);
   const end = new Date(endYear, endMonthNum, 0);
+  end.setHours(23, 59, 59, 999);
 
   const counts = { red: 0, orange: 0, yellow: 0, brown: 0, green: 0, blue: 0, teal: 0, gray: 0, black: 0 };
   const keys = Object.keys(localStorage).filter(k => /^ziary-\d{4}-\d{2}-\d{2}$/.test(k));
